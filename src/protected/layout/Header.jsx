@@ -16,7 +16,7 @@ const Header = ({ toggleSidebar }) => {
     const { theme, toggleTheme } = useContext(AppContext);
 
     return (
-        <header className='sticky w-full top-0 z-40 bg-[#005072] h-[50px]'>
+        <header className='sticky w-full top-0 z-40 bg-[#005072] h-[50px] py-2'>
             <div className='flex flex-grow items-center justify-between p-2 md:px-3 2xl:px-11'>
                 <div className='flex items-center space-x-3'>   
                     <RxHamburgerMenu size={25} className='text-gray-100 cursor-pointer' onClick={toggleSidebar} />

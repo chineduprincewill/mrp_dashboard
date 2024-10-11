@@ -23,7 +23,7 @@ const AgeBands = () => {
 
     return (
         <select
-                className='border border-gray-400 p-2'
+                className='border border-gray-400 p-2 text-sm'
         >   
             <option value="">Age band</option>
         {

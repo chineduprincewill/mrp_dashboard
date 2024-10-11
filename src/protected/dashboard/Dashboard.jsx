@@ -30,6 +30,11 @@ const Dashboard = () => {
         return data;
     }
 
+    const generateTitle = () => {
+        let msg = period === 'weekly' ? 'Weekly' : 'Last 28 days';
+        return msg;
+    }
+
     return (
         <div className='w-full m-0'>
             <div className='w-full flex justify-between bg-white h-16 items-center px-2'>
@@ -122,15 +127,15 @@ const Dashboard = () => {
                             
                         {
                             chart === 'line' ?
-                                <LineChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' fillColor='rgba(84,197,207,1)' title='Weekly test' />
+                                <LineChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' fillColor='rgba(84,197,207,1)' title={`${generateTitle()} test`} />
                                 :
-                                <BarChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' title='Weekly test' />
+                                <BarChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' title={`${generateTitle()} test`} />
                         }
                         {
                             chart === 'line' ? 
-                                <LineChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' fillColor='rgba(186,200,147,1)' title='Weekly positive' />
+                                <LineChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' fillColor='rgba(186,200,147,1)' title={`${generateTitle()} positive`} />
                                 :
-                                <BarChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' title='Weekly positive' />
+                                <BarChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' title={`${generateTitle()} positive`} />
                         }              
                         </div>
                     </div>

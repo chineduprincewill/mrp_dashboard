@@ -91,7 +91,7 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className='w-full grid md:flex px-2 space-y-4 md:space-y-0'>
-                    <div className={`w-full md:w-3/5 ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
+                    <div className={`w-full md:w-3/5`}>
                         <GoogleMapComponent />
                     </div>
                     <div className='w-full md:w-2/5 px-3'>

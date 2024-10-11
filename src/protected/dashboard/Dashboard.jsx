@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
 import BarChart from '../../charts/BarChart';
 import AgeBands from '../../common/AgeBands';
@@ -14,6 +14,7 @@ const Dashboard = () => {
     const { theme } = useContext(AppContext);
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');
+    const [refreshpage, setRefreshpage] = useState();
 
     const labels = () => {
         let data = [];
@@ -34,6 +35,10 @@ const Dashboard = () => {
         let msg = period === 'weekly' ? 'Weekly' : 'Last 28 days';
         return msg;
     }
+
+    useEffect(() => {
+        setTimeout(() => setRefreshpage(Date.now()), 10000 )
+    }, [refreshpage])
 
     return (
         <div className='w-full m-0'>

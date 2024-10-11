@@ -10,7 +10,7 @@ const TimerComponent = () => {
     }, [Date.now()])
 
     return (
-        <div className='md:text-xl font-bold text-[#005072]'>{curdatetime && formatDateAndTime(curdatetime)}</div>
+        <div className='text-xs md:text-xl md:font-bold text-[#005072]'>{curdatetime && formatDateAndTime(curdatetime)}</div>
     )
 }
 

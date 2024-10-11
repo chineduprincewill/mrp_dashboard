@@ -13,6 +13,7 @@ const Dashboard = () => {
 
     const { theme } = useContext(AppContext);
     const [chart, setChart] = useState('line');
+    const [period, setPeriod] = useState('weekly');
 
     const labels = () => {
         let data = [];
@@ -90,18 +91,35 @@ const Dashboard = () => {
                     </div>
                     <div className='w-full md:w-2/5 px-3'>
                         <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-50px] space-y-4`}>
-                            <div className='w-full flex space-x-4 items-center justify-end'>
-                                <IoAnalyticsOutline 
-                                    size={30} 
-                                    className={`cursor-pointer ${chart === 'line' ? 'text-[#114862]' : 'text-[#54c5cf]'}`} 
-                                    onClick={() => setChart('line')}
-                                />
-                                <ImStatsBars 
-                                    size={20} 
-                                    className={`cursor-pointer ${chart === 'bar' ? 'text-[#114862]' : 'text-[#54c5cf]'}`}
-                                    onClick={() => setChart('bar')}
-                                />
+                            <div className='flex items-center justify-between'>
+                                <div className='flex items-center space-x-6'>
+                                    <div 
+                                        className={`cursor-pointer text-gray-600 text-sm ${period === 'weekly' && 'border-b-2'} border-[#54c5cf] py-1`}
+                                        onClick={() => setPeriod('weekly')}
+                                    >
+                                        Weekly
+                                    </div>
+                                    <div 
+                                        className={`cursor-pointer whitespace-nowrap text-gray-600 text-sm ${period === '28days' && 'border-b-2'} border-[#54c5cf] py-1`}
+                                        onClick={() => setPeriod('28days')}
+                                    >
+                                        Last 28 days
+                                    </div>
+                                </div>
+                                <div className='w-full flex space-x-4 items-center justify-end'>
+                                    <IoAnalyticsOutline 
+                                        size={30} 
+                                        className={`cursor-pointer ${chart === 'line' ? 'text-[#114862]' : 'text-[#54c5cf]'}`} 
+                                        onClick={() => setChart('line')}
+                                    />
+                                    <ImStatsBars 
+                                        size={20} 
+                                        className={`cursor-pointer ${chart === 'bar' ? 'text-[#114862]' : 'text-[#54c5cf]'}`}
+                                        onClick={() => setChart('bar')}
+                                    />
+                                </div>
                             </div>
+                            
                         {
                             chart === 'line' ?
                                 <LineChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' fillColor='rgba(84,197,207,1)' title='Weekly test' />

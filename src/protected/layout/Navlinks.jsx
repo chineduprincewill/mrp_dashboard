@@ -59,9 +59,9 @@ const Navlinks = () => {
                             key={nav.id} className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-200`}
                         >
                             <div key={nav.id} className='grid'>
-                                <span className='text-lg'>{nav.state}</span>
+                                <span className='text-gray-700'>{nav.state}</span>
                                 <span className='font-extralight'>28-Day: {nav.test28} | <span className='text-[#7d9d25] font-bold'>{nav.pos28}</span></span>
-                                <span className='text-sm'>Total: {nav.testtotal} | <span className='text-[#7d9d25] font-bold'>{nav.postotal}</span></span>
+                                <span className='text-sm font-extralight'>Total: {nav.testtotal} | <span className='text-[#7d9d25] font-bold'>{nav.postotal}</span></span>
                             </div>
                         </li>
                     )

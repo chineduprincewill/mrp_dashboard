@@ -29,7 +29,7 @@ const Sidebar = ({ toggleSidebar, navOpen }) => {
                         </div>
                     </div>
                 </div>
-                <div className='w-full px-3 py-1 flex justify-center text-center'>
+                <div className='w-full px-3 py-1 flex justify-center'>
                     <div className={`w-full p-3 ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'} mt-1`}>
                         <span>Tests | <span className='text-[#7d9d25]'>Positives</span> by State</span>
                     </div>

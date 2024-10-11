@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { formatDateAndTime } from '../apis/functions';
+import React, { Fragment, useEffect, useState } from 'react'
+import { formatDateAndTime, formatTime } from '../apis/functions';
 
 const TimerComponent = () => {
 
@@ -10,7 +10,11 @@ const TimerComponent = () => {
     }, [Date.now()])
 
     return (
-        <div className='text-xs md:text-xl md:font-bold text-[#005072]'>{curdatetime && formatDateAndTime(curdatetime)}</div>
+        <Fragment>
+            <div className='text-xl font-semibold text-[#005072] hidden md:block'>{curdatetime && formatDateAndTime(curdatetime)}</div>
+            <div className='text-2xl font-bold text-[#005072] md:hidden'>{curdatetime && formatTime(curdatetime)}</div>
+        </Fragment>
+        
     )
 }
 

@@ -33,7 +33,7 @@ const Dashboard = () => {
     return (
         <div className='w-full m-0'>
             <div className='w-full flex justify-between bg-white h-16 items-center px-2'>
-                <span className='uppercase text-[#005072] font-extralight text-lg md:text-3xl'>apin situation room</span>
+                <span className='uppercase text-[#005072] font-extralight text-2xl md:text-3xl'>apin situation room</span>
                 <TimerComponent />
             </div>
 

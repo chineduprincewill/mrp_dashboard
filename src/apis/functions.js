@@ -71,6 +71,16 @@ export const formatDateAndTime = (dt) => {
     return `${monthNames[month]} ${day}, ${year} ${hour}:${minutes}:${seconds}`;
 }
 
+export const formatTime = (dt) => {
+
+    const date = new Date(dt);
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+  
+    return `${hour}:${minutes}:${seconds}`;
+}
+
 
 export const alertColors = (val, alert, limit, trend) => {
     let color = 'text-blue-600';

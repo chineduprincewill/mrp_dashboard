@@ -5,17 +5,19 @@ import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement
 // Register required Chart.js components
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
-const LineChart = ({ labels, data }) => {
+const LineChart = ({ labels, data, barsColor, fillColor, title }) => {
 
     const chartData = {
         labels: labels,
         datasets: [
           {
-            label: 'Patients in range',
+            label: `${new Date().getFullYear()} ${title} trend`,
             data: data,
-            fill: false,
-            backgroundColor: 'rgba(75,192,192,1)',
-            borderColor: 'rgba(75,192,192,1)',
+            fill: true,
+            backgroundColor: fillColor,
+            borderColor: barsColor,
+            borderWidth: 1, // Set the thickness of the line here
+            tension: 0.4, // for smooth lines
           }
         ],
     };

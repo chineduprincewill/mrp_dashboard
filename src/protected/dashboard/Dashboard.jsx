@@ -1,13 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
 import BarChart from '../../charts/BarChart';
 import AgeBands from '../../common/AgeBands';
 import TimerComponent from '../../common/TimerComponent';
 import GoogleMapComponent from '../../common/GoogleMapComponent';
+import AreaChart from '../../charts/AreaChart';
+import LineChart from '../../charts/LineChart';
+import { IoAnalyticsOutline } from 'react-icons/io5';
+import { ImStatsBars } from 'react-icons/im';
 
 const Dashboard = () => {
 
     const { theme } = useContext(AppContext);
+    const [chart, setChart] = useState('line');
 
     const labels = () => {
         let data = [];
@@ -84,9 +89,31 @@ const Dashboard = () => {
                         <GoogleMapComponent />
                     </div>
                     <div className='w-full md:w-2/5 px-3'>
-                        <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-30px]`}>
-                            <BarChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' title='Weekly test' />
-                            <BarChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' title='Weekly positive' />
+                        <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-50px] space-y-4`}>
+                            <div className='w-full flex space-x-4 items-center justify-end'>
+                                <IoAnalyticsOutline 
+                                    size={30} 
+                                    className={`cursor-pointer ${chart === 'line' ? 'text-[#114862]' : 'text-[#54c5cf]'}`} 
+                                    onClick={() => setChart('line')}
+                                />
+                                <ImStatsBars 
+                                    size={20} 
+                                    className={`cursor-pointer ${chart === 'bar' ? 'text-[#114862]' : 'text-[#54c5cf]'}`}
+                                    onClick={() => setChart('bar')}
+                                />
+                            </div>
+                        {
+                            chart === 'line' ?
+                                <LineChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' fillColor='rgba(84,197,207,1)' title='Weekly test' />
+                                :
+                                <BarChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' title='Weekly test' />
+                        }
+                        {
+                            chart === 'line' ? 
+                                <LineChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' fillColor='rgba(186,200,147,1)' title='Weekly positive' />
+                                :
+                                <BarChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' title='Weekly positive' />
+                        }              
                         </div>
                     </div>
                 </div>

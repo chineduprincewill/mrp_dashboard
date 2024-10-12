@@ -32,8 +32,8 @@ const GoogleMapComponent = () => {
     const [googleMaps, setGoogleMaps] = useState(window.google);
 
     const defaultIcon = {
-        url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // Google Maps default red marker
-        scaledSize: googleMaps && new window.google.maps.Size(20, 20), // Resize the marker
+        url: '/assets/marker.png', // Google Maps default red marker
+        scaledSize: googleMaps && new window.google.maps.Size(10, 10), // Resize the marker
     };
 
     return (

@@ -33,7 +33,7 @@ const GoogleMapComponent = () => {
 
     const defaultIcon = {
         url: '/assets/marker.png', // Google Maps default red marker
-        scaledSize: googleMaps && new window.google.maps.Size(10, 10), // Resize the marker
+        scaledSize: googleMaps && new window.google.maps.Size(2, 2), // Resize the marker
     };
 
     return (

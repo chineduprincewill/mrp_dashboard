@@ -5,7 +5,7 @@ import { AppContext } from '../../context/AppContext';
 const Navlinks = () => {
 
     const locatn = useLocation();
-    const { theme } = useContext(AppContext);
+    const { theme, locality, updateDashboardValues } = useContext(AppContext);
 
     const navlinks = [
         {
@@ -56,7 +56,8 @@ const Navlinks = () => {
                 navlinks.map(nav => {
                     return (
                         <li 
-                            key={nav.id} className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-200`}
+                            key={nav.id} className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-200 ${nav.state === locality && 'bg-gray-200'}`}
+                            onClick={() => updateDashboardValues(nav.state, nav.testtotal, nav.postotal, nav.test28, nav.pos28)}
                         >
                             <div key={nav.id} className='grid'>
                                 <span className='text-gray-700'>{nav.state}</span>

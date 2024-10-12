@@ -4,20 +4,25 @@ import BarChart from '../../charts/BarChart';
 import AgeBands from '../../common/AgeBands';
 import TimerComponent from '../../common/TimerComponent';
 import GoogleMapComponent from '../../common/GoogleMapComponent';
-import AreaChart from '../../charts/AreaChart';
 import LineChart from '../../charts/LineChart';
 import { IoAnalyticsOutline } from 'react-icons/io5';
 import { ImStatsBars } from 'react-icons/im';
-import HeatMapComponent from '../../common/HeatMapComponent';
+import { formatNumber } from 'chart.js/helpers';
+import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
 
 const Dashboard = () => {
 
-    const { theme } = useContext(AppContext);
+    const { theme, locality, totaltesting, totalpositive, day28testing, day28positive, cancelFilter } = useContext(AppContext);
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');
     const [refreshpage, setRefreshpage] = useState();
     //const [googleMaps, setGoogleMaps] = useState(window.google);
     const [mapview, setMapview] = useState('testing');
+    const [loc, setLoc] = useState()
+    const [totaltest, setTotaltest] = useState(totaltesting && totaltesting);
+    const [totalpos, setTotalpos] = useState(totalpositive && totalpositive);
+    const [day28test, setDay28test] = useState(day28testing && day28testing);
+    const [day28pos, setDay28pos] = useState(day28positive && day28positive);
 
     const labels = () => {
         let data = [];
@@ -43,10 +48,28 @@ const Dashboard = () => {
         setTimeout(() => setRefreshpage(Date.now()), 10000 )
     }, [refreshpage])
 
+    useEffect(() => {
+        setLoc(locality);
+        setTotaltest(totaltesting);
+        setTotalpos(totalpositive);
+        setDay28test(day28testing);
+        setDay28pos(day28positive)
+    }, [totaltesting])
+
     return (
         <div className='w-full m-0'>
             <div className='w-full flex justify-between bg-white h-16 items-center px-2'>
-                <span className='uppercase text-[#005072] font-extralight text-2xl md:text-3xl'>apin situation room</span>
+                <div className='flex items-baseline space-x-2 uppercase text-[#005072] font-extralight text-xl md:text-3xl'>
+                    <div>apin situation room {locality && ' - '+locality}</div>
+                    {locality && 
+                        <AiOutlineCloseCircle 
+                            size={15} 
+                            className='text-red-700 cursor-pointer' 
+                            title='cancel selection'
+                            onClick={() => cancelFilter()}
+                        />
+                    }
+                </div>
                 <TimerComponent />
             </div>
 
@@ -79,21 +102,21 @@ const Dashboard = () => {
                         <div className='flex items-center justify-between'>
                             <div className={`grid text-center p-2 w-[48.5%] ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
                                 <span className='text-xs'>Total Tests</span>
-                                <span className='text-2xl md:text-4xl'>676,609,955</span>
+                                <span className='text-2xl md:text-4xl'>{formatNumber(totaltest)}</span>
                             </div>
                             <div className={`grid text-center p-2 w-[48.5%] ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
                                 <span className='text-xs'>Total Positives</span>
-                                <span className='text-2xl md:text-4xl text-[#7d9d25]'>6,881,955</span>
+                                <span className='text-2xl md:text-4xl text-[#7d9d25]'>{formatNumber(totalpos)}</span>
                             </div>
                         </div>
                         <div className='flex items-center justify-between'>
                             <div className={`grid text-center p-2 w-[48.5%] ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
                                 <span className='text-xs'>28-Day Tests</span>
-                                <span className='text-2xl'>4,035,254</span>
+                                <span className='text-2xl'>{formatNumber(day28test)}</span>
                             </div>
                             <div className={`grid text-center p-2 w-[48.5%] ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
                                 <span className='text-xs'>28-Day Positives</span>
-                                <span className='text-2xl text-[#7d9d25]'>28,018</span>
+                                <span className='text-2xl text-[#7d9d25]'>{formatNumber(day28pos)}</span>
                             </div>
                         </div>
                     </div>

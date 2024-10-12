@@ -64,9 +64,9 @@ export const formatDateAndTime = (dt) => {
     const month = date.getMonth();
     const day = date.getDate();
     const year = date.getFullYear();
-    const hour = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
   
     return `${monthNames[month]} ${day}, ${year} ${hour}:${minutes}:${seconds}`;
 }
@@ -74,13 +74,12 @@ export const formatDateAndTime = (dt) => {
 export const formatTime = (dt) => {
 
     const date = new Date(dt);
-    const hour = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
   
     return `${hour}:${minutes}:${seconds}`;
 }
-
 
 export const alertColors = (val, alert, limit, trend) => {
     let color = 'text-blue-600';

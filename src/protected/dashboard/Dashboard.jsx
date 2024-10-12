@@ -177,13 +177,13 @@ const Dashboard = () => {
                             
                         {
                             chart === 'line' ?
-                                <LineChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' fillColor='rgba(84,197,207,1)' title={`${generateTitle()} test`} />
+                                <LineChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' bgColor='rgba(84,197,207,1)' title={`${generateTitle()} test`} />
                                 :
                                 <BarChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' title={`${generateTitle()} test`} />
                         }
                         {
                             chart === 'line' ? 
-                                <LineChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' fillColor='rgba(186,200,147,1)' title={`${generateTitle()} positive`} />
+                                <LineChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' bgColor='rgba(186,200,147,1)' title={`${generateTitle()} positive`} />
                                 :
                                 <BarChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' title={`${generateTitle()} positive`} />
                         }              

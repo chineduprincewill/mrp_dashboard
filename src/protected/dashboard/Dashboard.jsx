@@ -9,6 +9,7 @@ import { IoAnalyticsOutline } from 'react-icons/io5';
 import { ImStatsBars } from 'react-icons/im';
 import { formatNumber } from 'chart.js/helpers';
 import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
+import AreaChart from '../../charts/AreaChart';
 
 const Dashboard = () => {
 
@@ -186,7 +187,7 @@ const Dashboard = () => {
                                 <LineChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' bgColor='rgba(186,200,147,1)' title={`${generateTitle()} positive`} />
                                 :
                                 <BarChart labels={labels()} data={data()} barsColor='rgba(125,157,37,1)' title={`${generateTitle()} positive`} />
-                        }              
+                        }            
                         </div>
                     </div>
                 </div>

@@ -60,7 +60,7 @@ const Dashboard = () => {
         <div className='w-full m-0'>
             <div className='w-full flex justify-between bg-white h-16 items-center px-2'>
                 <div className='flex items-baseline space-x-2 uppercase text-[#005072] font-extralight text-xl md:text-3xl'>
-                    <div>apin situation room {locality && ' - '+locality}</div>
+                    <div>situation room {locality && ' - '+locality}</div>
                     {locality && 
                         <AiOutlineCloseCircle 
                             size={15} 

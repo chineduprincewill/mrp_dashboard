@@ -16,6 +16,8 @@ const Dashboard = () => {
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');
     const [refreshpage, setRefreshpage] = useState();
+    //const [googleMaps, setGoogleMaps] = useState(window.google);
+    const [mapview, setMapview] = useState('testing');
 
     const labels = () => {
         let data = [];
@@ -98,11 +100,29 @@ const Dashboard = () => {
                 </div>
                 <div className='w-full grid md:flex px-2 space-y-4 md:space-y-0'>
                     <div className={`w-full grid md:w-3/5`}>
-                        <GoogleMapComponent />
-                        <HeatMapComponent />
+                    {
+                        mapview === 'testing' ?
+                            <GoogleMapComponent />
+                            :
+                            <GoogleMapComponent />
+                    }
+                        <div className='w-full flex items-center space-x-8 justify-end my-4'>
+                            <div 
+                                className={`cursor-pointer text-sm ${mapview === 'testing' ? 'border-b-2 text-gray-700': 'text-gray-400'} border-[#54c5cf] py-1 cursor-pointer`}
+                                onClick={() => setMapview('testing')}
+                            >
+                                Saturation/coverage for testing
+                            </div>
+                            <div 
+                                className={`cursor-pointer whitespace-nowrap text-sm ${mapview === 'positive' ? 'border-b-2 text-gray-700' : 'text-gray-400'} border-[#54c5cf] py-1 cursor-pointer`}
+                                onClick={() => setMapview('positive')}
+                            >
+                                Positives identification
+                            </div>
+                        </div>
                     </div>
-                    <div className='w-full md:w-2/5 px-3'>
-                        <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-50px] space-y-4`}>
+                    <div className='w-full md:w-2/5 px-3 border-t md:border-none border-gray-300'>
+                        <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-10px] space-y-4`}>
                             <div className='flex items-center justify-between'>
                                 <div className='flex items-center space-x-6'>
                                     <div 

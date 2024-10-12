@@ -8,6 +8,7 @@ import AreaChart from '../../charts/AreaChart';
 import LineChart from '../../charts/LineChart';
 import { IoAnalyticsOutline } from 'react-icons/io5';
 import { ImStatsBars } from 'react-icons/im';
+import HeatMapComponent from '../../common/HeatMapComponent';
 
 const Dashboard = () => {
 
@@ -96,8 +97,9 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className='w-full grid md:flex px-2 space-y-4 md:space-y-0'>
-                    <div className={`w-full md:w-3/5`}>
+                    <div className={`w-full grid md:w-3/5`}>
                         <GoogleMapComponent />
+                        <HeatMapComponent />
                     </div>
                     <div className='w-full md:w-2/5 px-3'>
                         <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-50px] space-y-4`}>

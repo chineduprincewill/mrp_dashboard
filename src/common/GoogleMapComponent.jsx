@@ -1,5 +1,5 @@
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import React from 'react'
+import React, { useState } from 'react'
 
 // Define the container and map styles
 const containerStyle = {
@@ -29,6 +29,13 @@ const markers = [
 
 const GoogleMapComponent = () => {
 
+    const [googleMaps, setGoogleMaps] = useState(window.google);
+
+    const defaultIcon = {
+        url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // Google Maps default red marker
+        scaledSize: googleMaps && new window.google.maps.Size(40, 40), // Resize the marker
+    };
+
     return (
         <LoadScript googleMapsApiKey="AIzaSyAKdrTGAZX48oj9p7Z9hmyX1kCMmz8XDF4">
             <GoogleMap
@@ -42,6 +49,7 @@ const GoogleMapComponent = () => {
                     key={marker.id}
                     position={marker.position}
                     title={marker.name} // Tooltip on hover
+                    icon={defaultIcon}
                 />
                 ))}
             </GoogleMap>

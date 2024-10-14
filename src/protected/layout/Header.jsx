@@ -1,18 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AiOutlineLogout } from 'react-icons/ai';
-import { CiLight } from 'react-icons/ci';
-import { MdDarkMode, MdLightMode } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { useLocation } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
-import { formatDateAndTime } from '../../apis/functions';
-//import { AuthContext } from '../../context/AuthContext';
+import ThemeToggle from '../../common/ThemeToggle';
 
 const Header = ({ toggleSidebar }) => {
 
-    //const { user, logout } = useContext(AuthContext);
     const locatn = useLocation();
-    //const pageTitle = locatn.pathname.replace('/', '').replace('-', ' ');
     const { theme, toggleTheme } = useContext(AppContext);
 
     return (
@@ -31,6 +25,8 @@ const Header = ({ toggleSidebar }) => {
                         <span className='cursor-pointer hover:text-[#a6ce39]'>NDR</span>
                         <div className='h-6 border-x border-gray-400'></div>
                         <span className='cursor-pointer hover:text-[#a6ce39]'>NMRS</span>
+                        <div className='h-6 border-x border-gray-400'></div>
+                        <ThemeToggle />
                     </div>
                 </div>
             </div>

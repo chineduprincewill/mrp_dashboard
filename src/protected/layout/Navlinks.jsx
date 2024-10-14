@@ -56,11 +56,11 @@ const Navlinks = () => {
                 navlinks.map(nav => {
                     return (
                         <li 
-                            key={nav.id} className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-200 ${nav.state === locality && 'bg-gray-200'}`}
+                            key={nav.id} className={`px-3 py-4 border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${nav.state === locality && 'bg-gray-200 dark:bg-gray-700'}`}
                             onClick={() => updateDashboardValues(nav.state, nav.testtotal, nav.postotal, nav.test28, nav.pos28)}
                         >
                             <div key={nav.id} className='grid'>
-                                <span className='text-gray-700'>{nav.state}</span>
+                                <span>{nav.state}</span>
                                 <span className='font-extralight'>28-Day: {nav.test28} | <span className='text-[#7d9d25] font-bold'>{nav.pos28}</span></span>
                                 <span className='text-sm font-extralight'>Total: {nav.testtotal} | <span className='text-[#7d9d25] font-bold'>{nav.postotal}</span></span>
                             </div>

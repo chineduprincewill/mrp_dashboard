@@ -14,7 +14,7 @@ const DefaultLayout = () => {
     }
  
     return (
-        <div className={`w-full flex h-screen overflow-hidden ${theme === 'dark' ? 'bg-[#005072] text-white' : 'bg-gray-100 text-gray-800'}`}>
+        <div className={`w-full flex h-screen overflow-hidden bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-white`}>
             <Sidebar toggleSidebar={toggleSidebar} navOpen={navOpen} />
             <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                 <Header toggleSidebar={toggleSidebar} />

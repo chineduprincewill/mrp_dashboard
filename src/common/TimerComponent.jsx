@@ -11,8 +11,8 @@ const TimerComponent = () => {
 
     return (
         <Fragment>
-            <div className='text-xl font-semibold text-[#005072] hidden md:block'>{curdatetime && formatDateAndTime(curdatetime)}</div>
-            <div className='text-xl font-bold text-[#005072] md:hidden'>{curdatetime && formatTime(curdatetime)}</div>
+            <div className='text-xl font-semibold text-[#005072] dark:text-white hidden md:block'>{curdatetime && formatDateAndTime(curdatetime)}</div>
+            <div className='text-xl font-bold text-[#005072] dark:text-white md:hidden'>{curdatetime && formatTime(curdatetime)}</div>
         </Fragment>
         
     )

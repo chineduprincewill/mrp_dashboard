@@ -10,6 +10,7 @@ import { ImStatsBars } from 'react-icons/im';
 import { formatNumber } from 'chart.js/helpers';
 import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
 import AreaChart from '../../charts/AreaChart';
+import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io';
 
 const Dashboard = () => {
 
@@ -59,8 +60,8 @@ const Dashboard = () => {
 
     return (
         <div className='w-full m-0'>
-            <div className='w-full flex justify-between bg-white h-16 items-center px-2'>
-                <div className='flex items-baseline space-x-2 uppercase text-[#005072] font-extralight text-xl md:text-3xl'>
+            <div className='w-full flex justify-between bg-white dark:bg-[#19212c] h-16 items-center px-2'>
+                <div className='flex items-baseline space-x-2 uppercase text-[#005072] dark:text-white font-extralight text-xl md:text-3xl'>
                     <div>situation room {locality && ' - '+locality}</div>
                     {locality && 
                         <AiOutlineCloseCircle 
@@ -77,23 +78,24 @@ const Dashboard = () => {
             <div className='w-full grid my-4 space-y-4'>
                 <div className='w-full grid md:flex md:flex-row-reverse space-y-4 md:space-y-0'>
                     <div className='w-full md:w-2/5 pl-2 md:pl-4 pr-2 space-y-2'>
-                        <h1 className='border-b border-gray-300 text-gray-600 text-lg font-extralight'>Filter</h1>
-                        <div className='w-full flex items-center space-x-4 pt-2 pb-4 border-b border-gray-300'>
+                        <h1 className='border-b border-gray-300 dark:border-gray-700 font-extralight pb-1'>Filter</h1>
+                        <div className='w-full flex items-center space-x-4 pt-2 pb-4 border-b border-gray-300 dark:border-gray-700'>
                             <AgeBands />
                             <select
-                                className='border border-gray-400 p-2 text-sm'
+                                className='border border-gray-400 dark:border-gray-700 dark:bg-transparent p-2 text-sm text-gray-500'
                             >
                                 <option value=''>Gender</option>
                                 <option value='Male'>Male</option>
                                 <option value='Female'>Female</option>
                             </select>
                             <select
-                                className='border border-gray-400 p-2 text-sm'
+                                className='border border-gray-400 dark:border-gray-700 dark:bg-transparent p-2 text-sm text-gray-500'
                             >
                                 <option value=''>Modality</option>
                                 <option value='Index'>Index</option>
                                 <option value='PITC'>PITC</option>
                                 <option value='AP3'>AP3</option>
+                                <option value="KeyPop">KP</option>
                                 <option value='Community'>Community</option>
                                 <option value='Community Index'>Community Index</option>
                             </select>
@@ -101,21 +103,21 @@ const Dashboard = () => {
                     </div>
                     <div className='w-full md:w-3/5 pl-2 md:pr-0.5 pr-2 space-y-4'>
                         <div className='flex items-center justify-between'>
-                            <div className={`grid text-center p-2 w-[48.5%] ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
+                            <div className={`grid text-center p-2 w-[48.5%] bg-gray-200 dark:bg-gray-700`}>
                                 <span className='text-xs'>Total Tests</span>
                                 <span className='text-2xl md:text-4xl'>{formatNumber(totaltest)}</span>
                             </div>
-                            <div className={`grid text-center p-2 w-[48.5%] ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
+                            <div className={`grid text-center p-2 w-[48.5%] bg-gray-200 dark:bg-gray-700`}>
                                 <span className='text-xs'>Total Positives</span>
                                 <span className='text-2xl md:text-4xl text-[#7d9d25]'>{formatNumber(totalpos)}</span>
                             </div>
                         </div>
                         <div className='flex items-center justify-between'>
-                            <div className={`grid text-center p-2 w-[48.5%] ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
+                            <div className={`grid text-center p-2 w-[48.5%] bg-gray-200 dark:bg-gray-700`}>
                                 <span className='text-xs'>28-Day Tests</span>
                                 <span className='text-2xl'>{formatNumber(day28test)}</span>
                             </div>
-                            <div className={`grid text-center p-2 w-[48.5%] ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-gray-200'}`}>
+                            <div className={`grid text-center p-2 w-[48.5%] bg-gray-200 dark:bg-gray-700`}>
                                 <span className='text-xs'>28-Day Positives</span>
                                 <span className='text-2xl text-[#7d9d25]'>{formatNumber(day28pos)}</span>
                             </div>
@@ -130,33 +132,38 @@ const Dashboard = () => {
                             :
                             <GoogleMapComponent />
                     }
-                        <div className='w-full flex items-center space-x-8 justify-end my-4'>
+                        <div className='w-full flex items-center space-x-8 justify-between'>
                             <div 
-                                className={`cursor-pointer text-sm ${mapview === 'testing' ? 'border-b-2 text-gray-700': 'text-gray-400'} border-[#54c5cf] py-1 cursor-pointer`}
+                                className={`cursor-pointer text-sm py-1`}
                                 onClick={() => setMapview('testing')}
                             >
-                                Saturation/coverage for testing
+                                <IoMdArrowDropleft size={30} />
+                            </div>
+                            <div>
+                            {
+                                mapview === 'testing' ? 'Saturation/coverage for testing' : 'Positives identification'
+                            }
                             </div>
                             <div 
-                                className={`cursor-pointer whitespace-nowrap text-sm ${mapview === 'positive' ? 'border-b-2 text-gray-700' : 'text-gray-400'} border-[#54c5cf] py-1 cursor-pointer`}
+                                className={`cursor-pointer text-sm py-1`}
                                 onClick={() => setMapview('positive')}
                             >
-                                Positives identification
+                                <IoMdArrowDropright size={30} />
                             </div>
                         </div>
                     </div>
                     <div className='w-full md:w-2/5 px-3 border-t md:border-none border-gray-300'>
                         <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-10px] space-y-4`}>
                             <div className='flex items-center justify-between'>
-                                <div className='flex items-center space-x-6'>
+                                <div className='flex items-center space-x-6 px-2'>
                                     <div 
-                                        className={`cursor-pointer text-gray-600 text-sm ${period === 'weekly' && 'border-b-2'} border-[#54c5cf] py-1`}
+                                        className={`cursor-pointer text-sm ${period === 'weekly' && 'border-b-2'} border-[#54c5cf] py-1 dark:font-extralight`}
                                         onClick={() => setPeriod('weekly')}
                                     >
                                         Weekly
                                     </div>
                                     <div 
-                                        className={`cursor-pointer whitespace-nowrap text-gray-600 text-sm ${period === '28days' && 'border-b-2'} border-[#54c5cf] py-1`}
+                                        className={`cursor-pointer whitespace-nowrap text-sm ${period === '28days' && 'border-b-2'} border-[#54c5cf] py-1 dark:font-extralight`}
                                         onClick={() => setPeriod('28days')}
                                     >
                                         Last 28 days

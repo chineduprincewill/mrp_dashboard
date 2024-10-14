@@ -152,7 +152,7 @@ const Dashboard = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='w-full md:w-2/5 px-3 border-t md:border-none border-gray-300'>
+                    <div className='w-full md:w-2/5 px-3 pt-2 md:pt-0 border-t md:border-none border-gray-300 dark:border-gray-700'>
                         <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-10px] space-y-4`}>
                             <div className='flex items-center justify-between'>
                                 <div className='flex items-center space-x-6 px-2'>
@@ -187,7 +187,7 @@ const Dashboard = () => {
                             chart === 'line' ?
                                 <LineChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' bgColor='rgba(84,197,207,1)' title={`${generateTitle()} test`} />
                                 :
-                                <BarChart labels={labels()} data={data()} barsColor='rgba(0,80,114,1)' title={`${generateTitle()} test`} />
+                                <BarChart labels={labels()} data={data()} barsColor='rgba(84,197,207,1)' title={`${generateTitle()} test`} />
                         }
                         {
                             chart === 'line' ? 

@@ -15,7 +15,8 @@ const LineChart = ({ labels, data, barsColor, bgColor, title }) => {
             data: data,
             fill: true,
             backgroundColor: bgColor,
-            borderColor: barsColor,
+            borderColor: bgColor,
+            pointRadius: 0, // Remove the markers
             borderWidth: 1, // Set the thickness of the line here
             tension: 0.4, // for smooth lines
           }
@@ -30,11 +31,17 @@ const LineChart = ({ labels, data, barsColor, bgColor, title }) => {
             display: true,
             text: title, // Title for x-axis
           },
+          grid: {
+            display: false
+          },
         },
         y: {
           title: {
             display: true,
             text: 'Count', // Title for y-axis
+          },
+          grid: {
+            display: false
           },
           beginAtZero: true, // Start y-axis at 0
         },

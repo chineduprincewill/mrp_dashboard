@@ -22,10 +22,6 @@ const Header = ({ toggleSidebar }) => {
                         <div className='h-6 border-x border-gray-400'></div>
                         <span className='cursor-pointer hover:text-[#a6ce39]'>MRP</span>
                         <div className='h-6 border-x border-gray-400'></div>
-                        <span className='cursor-pointer hover:text-[#a6ce39]'>NDR</span>
-                        <div className='h-6 border-x border-gray-400'></div>
-                        <span className='cursor-pointer hover:text-[#a6ce39]'>NMRS</span>
-                        <div className='h-6 border-x border-gray-400'></div>
                         <ThemeToggle />
                     </div>
                 </div>

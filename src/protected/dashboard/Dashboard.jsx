@@ -72,8 +72,8 @@ const Dashboard = () => {
                 })
             })
         }
-
-        return markers;
+        console.log(markers);
+        setMarkers(markers);
     }
 
     useEffect(() => {
@@ -106,7 +106,7 @@ const Dashboard = () => {
     }, [selectedState])
 
     useEffect(() => {
-        setMarkers(generateMarkers());
+        generateMarkers();
     }, [])
 
     return (

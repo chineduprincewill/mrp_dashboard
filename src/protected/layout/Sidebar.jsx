@@ -30,7 +30,7 @@ const Sidebar = ({ toggleSidebar, navOpen }) => {
                 </div>
                 <div className='w-full px-3 py-1 flex justify-center'>
                     <div className={`w-full p-3 bg-gray-200 dark:bg-gray-700 mt-1`}>
-                        <span>Tests | <span className='text-[#7d9d25]'>Positives</span> by State</span>
+                        <span>Tests | <span className='text-[#7d9d25]'>Positives</span></span>
                     </div>
                 </div>
                 <div className='w-full flex justify-start px-3'>

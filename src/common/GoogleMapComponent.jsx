@@ -1,5 +1,7 @@
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import SectionLoader from './SectionLoader';
+import NotificationLoader from './NotificationLoader';
 
 // Define the container and map styles
 const containerStyle = {
@@ -8,12 +10,40 @@ const containerStyle = {
 };
 
 // Center position of the map
+const statecords = [
+    {
+        state: "Benue",
+        lat: 7.33333,
+        lng: 8.75
+    },
+    {
+        state: "Ondo",
+        lat: 7.16667,
+        lng: 5.08333
+    },
+    {
+        state: "Ogun",
+        lat: 7.16083330,
+        lng: 3.34833330
+    },
+    {
+        state: "Oyo",
+        lat: 8.0,
+        lng: 4.0
+    },
+    {
+        state: "Plateau",
+        lat: 9.16667,
+        lng: 9.75
+    },
+]
+
 const center = {
     lat: 7.33333, // Latitude of the center (e.g., San Francisco)
     lng: 8.75 // Longitude of the center
 };
 
-const markers = [
+/**const markers = [
     { id: 1, name: 'Aganacha Primary Health Clinic', position: { lat: 6.65858, lng: 7.90102 } },
     { id: 2, name: 'Ivetse Primary Health Clinic', position: { lat: 6.67889404300007, lng: 7.89990234400005 } },
     { id: 3, name: 'Okpobila Health Post', position: { lat: 6.61118, lng: 7.91144 } },
@@ -25,9 +55,9 @@ const markers = [
     { id: 9, name: 'Dogo Primary Health Clinic', position: { lat: 7.37099000000006, lng: 9.20224000000007 }},
     { id: 10, name: 'Ikov Agudu Primary Health Clinic', position: { lat: 7.42248535100003, lng: 9.22692871100003 }},
     { id: 11, name: 'NKST Health Centre (Sevav)', position: { lat: 7.43450000000007, lng: 9.28831000000002 }},
-];
+];*/
 
-const GoogleMapComponent = () => {
+const GoogleMapComponent = ({ loading, selectedState, markers }) => {
 
     const [googleMaps, setGoogleMaps] = useState(window.google);
 
@@ -36,24 +66,43 @@ const GoogleMapComponent = () => {
         scaledSize: googleMaps && new window.google.maps.Size(2, 2), // Resize the marker
     };
 
+    const getStateCenterCord = (val) => {
+        let cord;
+        statecords.map(stc => {
+            if(stc.state === val){
+                cord = {
+                    lat: stc.lat,
+                    lng: stc.lng
+                }
+            }
+        })
+        return cord;
+    }
+
+    useEffect(() => {
+        console.log(getStateCenterCord(selectedState));
+    }, [])
+
     return (
-        <LoadScript googleMapsApiKey="AIzaSyAKdrTGAZX48oj9p7Z9hmyX1kCMmz8XDF4">
-            <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={center}
-                zoom={8}
-            >
-             {/* Map through the markers array and render each marker */}
-                {markers.map((marker) => (
-                <Marker
-                    key={marker.id}
-                    position={marker.position}
-                    title={marker.name} // Tooltip on hover
-                    icon={defaultIcon}
-                />
-                ))}
-            </GoogleMap>
-        </LoadScript>
+        <div>
+        { loading && <NotificationLoader /> }    
+            <LoadScript googleMapsApiKey="AIzaSyAKdrTGAZX48oj9p7Z9hmyX1kCMmz8XDF4">
+                <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={getStateCenterCord(selectedState)}
+                    zoom={8}
+                >
+                {/* Map through the markers array and render each marker */}
+                    {markers && markers.map((marker) => (
+                    <Marker
+                        key={marker.id}
+                        position={marker.position}
+                        icon={defaultIcon}
+                    />
+                    ))}
+                </GoogleMap>
+            </LoadScript>
+        </div>
     )
 }
 

@@ -9,22 +9,30 @@ import { IoAnalyticsOutline } from 'react-icons/io5';
 import { ImStatsBars } from 'react-icons/im';
 import { formatNumber } from 'chart.js/helpers';
 import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
-import AreaChart from '../../charts/AreaChart';
 import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io';
+import { generateFiscalYear, pageRefresh } from '../../apis/functions';
+import { fetchStateDetail, fetchStatesSummary, getTotal28Positives, getTotal28Tests, getTotalPositives, getTotalTests } from '../../apis/dashboardActions';
+import SectionLoader from '../../common/SectionLoader';
 
 const Dashboard = () => {
 
-    const { theme, locality, totaltesting, totalpositive, day28testing, day28positive, cancelFilter } = useContext(AppContext);
+    const { locality, totaltesting, totalpositive, day28testing, day28positive, cancelFilter, selectedState, updateStateSelection } = useContext(AppContext);
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');
     const [refreshpage, setRefreshpage] = useState();
+    const [error, setError] = useState(null);
+    const [fetching, setFetching] = useState(false);
+    const [loading, setLoading] = useState(false);
     //const [googleMaps, setGoogleMaps] = useState(window.google);
     const [mapview, setMapview] = useState('testing');
+    const [markers, setMarkers] = useState();
+    const [statesSummary, setStatesSummary] = useState(null);
+    const [stateDetail, setStateDetail] = useState(null);
     const [loc, setLoc] = useState()
-    const [totaltest, setTotaltest] = useState(totaltesting && totaltesting);
-    const [totalpos, setTotalpos] = useState(totalpositive && totalpositive);
-    const [day28test, setDay28test] = useState(day28testing && day28testing);
-    const [day28pos, setDay28pos] = useState(day28positive && day28positive);
+    const [totaltest, setTotaltest] = useState();
+    const [totalpos, setTotalpos] = useState();
+    const [day28test, setDay28test] = useState();
+    const [day28pos, setDay28pos] = useState();
 
     const labels = () => {
         let data = [];
@@ -41,22 +49,65 @@ const Dashboard = () => {
         return data;
     }
 
+    const clearSelection = () => {
+        cancelFilter();
+        updateStateSelection(null);
+    }
+
     const generateTitle = () => {
         let msg = period === 'weekly' ? 'Weekly' : 'Last 28 days';
         return msg;
     }
 
-    useEffect(() => {
-        setTimeout(() => setRefreshpage(Date.now()), 10000 )
-    }, [refreshpage])
+    const generateMarkers = () => {
+        let markers = [];
+        if(stateDetail !== null){
+            stateDetail.map(sd => {
+                markers.push({
+                    id: sd?.id,
+                    position: {
+                        lat: sd?.latitude,
+                        lng: sd?.longitude
+                    }
+                })
+            })
+        }
+
+        return markers;
+    }
 
     useEffect(() => {
-        setLoc(locality);
-        setTotaltest(totaltesting);
-        setTotalpos(totalpositive);
-        setDay28test(day28testing);
-        setDay28pos(day28positive)
-    }, [totaltesting])
+        fetchStatesSummary({}, setStatesSummary, setError, setFetching);
+
+        const intervalId = setInterval(() => {
+            fetchStatesSummary({}, setStatesSummary, setError, setFetching);
+          }, 60000); // 60 seconds
+      
+          return () => clearInterval(intervalId);
+    }, [])
+
+    useEffect(() => {
+        if(statesSummary !== null){
+            setLoc(statesSummary?.state);
+            setTotaltest(getTotalTests(statesSummary));
+            setTotalpos(getTotalPositives(statesSummary));
+            setDay28test(getTotal28Tests(statesSummary));
+            setDay28pos(getTotal28Positives(statesSummary));
+        }
+    }, [Date.now()])
+
+    useEffect(() => {
+        if(selectedState !== null){
+            const data = {
+                state: selectedState
+            }
+            fetchStateDetail(data, setStateDetail, setError, setLoading);
+        }
+    }, [selectedState])
+
+    useEffect(() => {
+        setMarkers(generateMarkers());
+    }, [])
 
     return (
         <div className='w-full m-0'>
@@ -68,7 +119,7 @@ const Dashboard = () => {
                             size={15} 
                             className='text-red-700 cursor-pointer' 
                             title='cancel selection'
-                            onClick={() => cancelFilter()}
+                            onClick={() => clearSelection()}
                         />
                     }
                 </div>
@@ -105,21 +156,27 @@ const Dashboard = () => {
                         <div className='flex items-center justify-between'>
                             <div className={`grid text-center p-2 w-[48.5%] bg-gray-200 dark:bg-gray-700`}>
                                 <span className='text-xs'>Total Tests</span>
-                                <span className='text-2xl md:text-4xl'>{formatNumber(totaltest)}</span>
+                                <span className='text-2xl md:text-4xl'>
+                                    {totaltesting ? formatNumber(totaltesting) : (totaltest ? formatNumber(totaltest) : <SectionLoader />) }
+                                </span>
                             </div>
                             <div className={`grid text-center p-2 w-[48.5%] bg-gray-200 dark:bg-gray-700`}>
                                 <span className='text-xs'>Total Positives</span>
-                                <span className='text-2xl md:text-4xl text-[#7d9d25]'>{formatNumber(totalpos)}</span>
+                                <span className='text-2xl md:text-4xl text-[#7d9d25]'>
+                                    {totalpositive ? formatNumber(totalpositive) : (totalpos ? formatNumber(totalpos) : <SectionLoader />)}
+                                </span>
                             </div>
                         </div>
                         <div className='flex items-center justify-between'>
                             <div className={`grid text-center p-2 w-[48.5%] bg-gray-200 dark:bg-gray-700`}>
                                 <span className='text-xs'>28-Day Tests</span>
-                                <span className='text-2xl'>{formatNumber(day28test)}</span>
+                                <span className='text-2xl'>
+                                    {day28testing ? formatNumber(day28testing) : (day28test ? formatNumber(day28test) : <SectionLoader />)}</span>
                             </div>
                             <div className={`grid text-center p-2 w-[48.5%] bg-gray-200 dark:bg-gray-700`}>
                                 <span className='text-xs'>28-Day Positives</span>
-                                <span className='text-2xl text-[#7d9d25]'>{formatNumber(day28pos)}</span>
+                                <span className='text-2xl text-[#7d9d25]'>
+                                    {day28positive ? formatNumber(day28positive) : (day28pos ? formatNumber(day28pos) : <SectionLoader />)}</span>
                             </div>
                         </div>
                     </div>
@@ -128,9 +185,9 @@ const Dashboard = () => {
                     <div className={`w-full grid md:w-3/5`}>
                     {
                         mapview === 'testing' ?
-                            <GoogleMapComponent />
+                            <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers} />
                             :
-                            <GoogleMapComponent />
+                            <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers} />
                     }
                         <div className='w-full flex items-center space-x-8 justify-between'>
                             <div 
@@ -153,7 +210,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <div className='w-full md:w-2/5 px-3 pt-2 md:pt-0 border-t md:border-none border-gray-300 dark:border-gray-700'>
-                        <div className={`${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'} mt-0 md:mt-[-10px] space-y-4`}>
+                        <div className={`mt-0 md:mt-[-10px] space-y-4`}>
                             <div className='flex items-center justify-between'>
                                 <div className='flex items-center space-x-6 px-2'>
                                     <div 

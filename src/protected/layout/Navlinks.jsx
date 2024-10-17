@@ -1,11 +1,33 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext';
+import { fetchStatesSummary } from '../../apis/dashboardActions';
+import NotificationLoader from '../../common/NotificationLoader';
 
 const Navlinks = () => {
 
     const locatn = useLocation();
-    const { theme, locality, updateDashboardValues } = useContext(AppContext);
+    const { locality, updateDashboardValues, updateStateSelection } = useContext(AppContext);
+
+    const [statesSummary, setStatesSummary] = useState(null);
+    const [error, setError] = useState(null);
+    const [fetching, setFetching] = useState(null);
+
+    const updateDashboard = (val1, val2, val3, val4, val5) => {
+        updateDashboardValues(val1, val2, val3, val4, val5);
+        updateStateSelection(val1);
+    }
+
+    useEffect(() => {
+        fetchStatesSummary({}, setStatesSummary, setError, setFetching);
+
+        const intervalId = setInterval(() => {
+            fetchStatesSummary({}, setStatesSummary, setError, setFetching);
+        }, 60000); // 60 seconds
+      
+        return () => clearInterval(intervalId);
+    }, [])
+
 
     const navlinks = [
         {
@@ -51,18 +73,19 @@ const Navlinks = () => {
     ]
 
     return (
-        <ul className={`w-full ${ theme === 'dark' ? 'bg-[#114862]' : 'bg-transparent'}`}>
+        <ul className={`w-full `}>
+            <li className='px-3 h-4'><span className='italic text-xs'>{ fetching && 'loading...'}</span></li>
             {
-                navlinks.map(nav => {
+                statesSummary !== null && statesSummary.map((nav, index) => {
                     return (
                         <li 
-                            key={nav.id} className={`px-3 py-4 border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${nav.state === locality && 'bg-gray-200 dark:bg-gray-700'}`}
-                            onClick={() => updateDashboardValues(nav.state, nav.testtotal, nav.postotal, nav.test28, nav.pos28)}
+                            key={index} className={`px-3 py-4 border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${nav.state === locality && 'bg-gray-200 dark:bg-gray-700'}`}
+                            onClick={() => updateDashboard(nav.state, nav.total_entries, nav.confirmed, nav.last_28_days_count, nav.confirmed_last_28_days)}
                         >
-                            <div key={nav.id} className='grid'>
-                                <span>{nav.state}</span>
-                                <span className='font-extralight'>28-Day: {nav.test28} | <span className='text-[#7d9d25] font-bold'>{nav.pos28}</span></span>
-                                <span className='text-sm font-extralight'>Total: {nav.testtotal} | <span className='text-[#7d9d25] font-bold'>{nav.postotal}</span></span>
+                            <div className='grid'>
+                                <span>{nav?.state}</span>
+                                <span className='font-extralight'>28-Day: {nav?.last_28_days_count} | <span className='text-[#7d9d25] font-bold'>{nav?.confirmed_last_28_days}</span></span>
+                                <span className='text-sm font-extralight'>Total: {nav?.total_entries} | <span className='text-[#7d9d25] font-bold'>{nav?.confirmed}</span></span>
                             </div>
                         </li>
                     )

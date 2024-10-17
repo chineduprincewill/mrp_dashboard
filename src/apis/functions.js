@@ -150,3 +150,20 @@ export const formatNaira = (amount) => {
 function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+export const generateFiscalYear = () => {
+    const currentYear = new Date().getFullYear();
+    const dateRanges = [];
+
+    for (let year = 2020; year <= currentYear; year++) {
+        const startDate = new Date(year, 9, 1); // October 1st of the current year
+        const endDate = new Date(year + 1, 8, 30); // September 30th of the next year
+        dateRanges.push({ startDate, endDate });
+    }
+
+    return dateRanges;
+}
+
+export const pageRefresh = (setRefreshpage) => {
+    setTimeout(() => setRefreshpage(Date.now(), 60000));
+}

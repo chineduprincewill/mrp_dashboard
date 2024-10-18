@@ -93,13 +93,13 @@ const Dashboard = () => {
             setTotalpos(getTotalPositives(statesSummary));
             setDay28test(getTotal28Tests(statesSummary));
             setDay28pos(getTotal28Positives(statesSummary));
-            updateDashboardValues(
+            /**updateDashboardValues(
                 loc,
                 getTotalTests(statesSummary),
                 getTotalPositives(statesSummary),
                 getTotal28Tests(statesSummary),
                 getTotal28Positives(statesSummary)
-            );
+            );*/
         }
     }, [Date.now()])
 

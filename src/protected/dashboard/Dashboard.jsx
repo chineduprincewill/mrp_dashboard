@@ -16,7 +16,7 @@ import SectionLoader from '../../common/SectionLoader';
 
 const Dashboard = () => {
 
-    const { locality, totaltesting, totalpositive, day28testing, day28positive, cancelFilter, selectedState, updateStateSelection } = useContext(AppContext);
+    const { locality, totaltesting, totalpositive, day28testing, day28positive, updateDashboardValues, cancelFilter, selectedState, updateStateSelection } = useContext(AppContext);
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');
     const [refreshpage, setRefreshpage] = useState();
@@ -81,9 +81,9 @@ const Dashboard = () => {
 
         const intervalId = setInterval(() => {
             fetchStatesSummary({}, setStatesSummary, setError, setFetching);
-          }, 60000); // 60 seconds
+        }, 60000); // 60 seconds
       
-          return () => clearInterval(intervalId);
+        return () => clearInterval(intervalId);
     }, [])
 
     useEffect(() => {
@@ -93,6 +93,13 @@ const Dashboard = () => {
             setTotalpos(getTotalPositives(statesSummary));
             setDay28test(getTotal28Tests(statesSummary));
             setDay28pos(getTotal28Positives(statesSummary));
+            updateDashboardValues(
+                loc,
+                getTotalTests(statesSummary),
+                getTotalPositives(statesSummary),
+                getTotal28Tests(statesSummary),
+                getTotal28Positives(statesSummary)
+            );
         }
     }, [Date.now()])
 
@@ -113,7 +120,7 @@ const Dashboard = () => {
         <div className='w-full m-0'>
             <div className='w-full flex justify-between bg-white dark:bg-[#19212c] h-16 items-center px-2'>
                 <div className='flex items-baseline space-x-2 uppercase text-[#005072] dark:text-white font-extralight text-xl md:text-3xl'>
-                    <div>situation room {locality && ' - '+locality}</div>
+                    <div>EPI-SURVEILLANCE {locality && ' - '+locality}</div>
                     {locality && 
                         <AiOutlineCloseCircle 
                             size={15} 

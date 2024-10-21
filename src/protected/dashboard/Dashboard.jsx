@@ -154,6 +154,7 @@ const Dashboard = () => {
             }
             fetchStateDetail(data, setStateDetail, setError, setLoading);
             setShowmap(false);
+            setMapview('testing');
         }
     }, [selectedState])
 

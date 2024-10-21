@@ -61,6 +61,8 @@ const GoogleMapComponent = ({ loading, selectedState, markers }) => {
 
     const [googleMaps, setGoogleMaps] = useState(window.google);
 
+    console.log(markers);
+
     const defaultIcon = {
         url: '/assets/marker3.png', // Google Maps default red marker
         scaledSize: googleMaps && new window.google.maps.Size(2, 2), // Resize the marker
@@ -79,6 +81,11 @@ const GoogleMapComponent = ({ loading, selectedState, markers }) => {
         return cord;
     }
 
+    const defaultCenter = {
+        lat: 9.077751,
+        lng: 8.6774567
+    }
+
     useEffect(() => {
         console.log(getStateCenterCord(selectedState));
     }, [])
@@ -89,17 +96,24 @@ const GoogleMapComponent = ({ loading, selectedState, markers }) => {
             <LoadScript googleMapsApiKey="AIzaSyAKdrTGAZX48oj9p7Z9hmyX1kCMmz8XDF4">
                 <GoogleMap
                     mapContainerStyle={containerStyle}
-                    center={getStateCenterCord(selectedState)}
+                    center={selectedState !== null ? getStateCenterCord(selectedState) : defaultCenter}
                     zoom={8}
+                    className='bg-red-500'
                 >
                 {/* Map through the markers array and render each marker */}
-                    {markers && markers.map((marker) => (
+                    {markers && markers.length > 0 ? markers.map((marker) => (
                     <Marker
                         key={marker.id}
                         position={marker.position}
                         icon={defaultIcon}
                     />
-                    ))}
+                    ))
+                    :
+                    <Marker
+                        position={defaultCenter}
+                        icon={defaultIcon}
+                    />
+                    }
                 </GoogleMap>
             </LoadScript>
         </div>

@@ -13,10 +13,11 @@ import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io';
 import { generateFiscalYear, pageRefresh } from '../../apis/functions';
 import { fetchStateDetail, fetchStatesSummary, getTotal28Positives, getTotal28Tests, getTotalPositives, getTotalTests } from '../../apis/dashboardActions';
 import SectionLoader from '../../common/SectionLoader';
+import { MdGpsFixed } from 'react-icons/md';
 
 const Dashboard = () => {
 
-    const { locality, totaltesting, totalpositive, day28testing, day28positive, updateDashboardValues, cancelFilter, selectedState, updateStateSelection } = useContext(AppContext);
+    const { locality, totaltesting, totalpositive, day28testing, day28positive, updateDashboardValues, cancelFilter, selectedState, updateStateSelection, record, refreshRecord } = useContext(AppContext);
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');
     const [refreshpage, setRefreshpage] = useState();
@@ -26,6 +27,7 @@ const Dashboard = () => {
     //const [googleMaps, setGoogleMaps] = useState(window.google);
     const [mapview, setMapview] = useState('testing');
     const [markers, setMarkers] = useState();
+    const [pmarkers, setPmarkers] = useState();
     const [statesSummary, setStatesSummary] = useState(null);
     const [stateDetail, setStateDetail] = useState(null);
     const [loc, setLoc] = useState()
@@ -33,6 +35,7 @@ const Dashboard = () => {
     const [totalpos, setTotalpos] = useState();
     const [day28test, setDay28test] = useState();
     const [day28pos, setDay28pos] = useState();
+    const [showmap, setShowmap] = useState(false);
 
     const labels = () => {
         let data = [];
@@ -52,6 +55,21 @@ const Dashboard = () => {
     const clearSelection = () => {
         cancelFilter();
         updateStateSelection(null);
+        window.location.reload();
+    }
+
+    const displayMapMarkers = () => {
+        setShowmap(true);
+        refreshRecord(Date.now());
+    }
+
+    const toggleMapview = (view, status) => {
+        if(view === 'positive' && status === 'testing'){
+            setMapview('testing')
+        }
+        else if(view === 'testing' && status === 'positive'){
+            setMapview('positive')
+        }
     }
 
     const generateTitle = () => {
@@ -60,20 +78,39 @@ const Dashboard = () => {
     }
 
     const generateMarkers = () => {
-        let markers = [];
+        let mkrdata = [];
         if(stateDetail !== null){
-            stateDetail.map(sd => {
-                markers.push({
-                    id: sd?.id,
+            stateDetail.map((sd, index) => {
+                mkrdata.push({
+                    id: index,
                     position: {
-                        lat: sd?.latitude,
-                        lng: sd?.longitude
+                        lat: parseFloat(sd?.latitude),
+                        lng: parseFloat(sd?.longitude)
                     }
                 })
             })
         }
-        console.log(markers);
-        setMarkers(markers);
+        //console.log(mkrdata);
+        return mkrdata;
+    }
+
+    const generatePositiveMarkers = () => {
+        let mkrdata = [];
+        if(stateDetail !== null){
+            stateDetail.map((sd, index) => {
+                if(sd?.record_status === 'Linked'){
+                    mkrdata.push({
+                        id: index,
+                        position: {
+                            lat: parseFloat(sd?.latitude),
+                            lng: parseFloat(sd?.longitude)
+                        }
+                    })
+                }
+            })
+        }
+        //console.log(mkrdata);
+        return mkrdata;
     }
 
     useEffect(() => {
@@ -104,17 +141,27 @@ const Dashboard = () => {
     }, [Date.now()])
 
     useEffect(() => {
+        if(stateDetail !== null) {
+            setMarkers(generateMarkers());
+            setPmarkers(generatePositiveMarkers());
+        }
+    }, [selectedState, record]) 
+
+    useEffect(() => {
         if(selectedState !== null){
             const data = {
                 state: selectedState
             }
             fetchStateDetail(data, setStateDetail, setError, setLoading);
+            setShowmap(false);
         }
     }, [selectedState])
 
     useEffect(() => {
-        generateMarkers();
-    }, [])
+        refreshRecord(Date.now())
+        //clearSelection();
+        //!loading && stateDetail !== null && updateStateSelection(null);
+    }, [selectedState])
 
     return (
         <div className='w-full m-0'>
@@ -122,12 +169,14 @@ const Dashboard = () => {
                 <div className='flex items-baseline space-x-2 uppercase text-[#005072] dark:text-white font-extralight text-xl md:text-3xl'>
                     <div>EPI-SURVEILLANCE {locality && ' - '+locality}</div>
                     {locality && 
-                        <AiOutlineCloseCircle 
-                            size={15} 
-                            className='text-red-700 cursor-pointer' 
-                            title='cancel selection'
-                            onClick={() => clearSelection()}
-                        />
+                        <div className='flex space-x-2 items-center'>
+                            <AiOutlineCloseCircle 
+                                size={15} 
+                                className='text-red-700 cursor-pointer' 
+                                title='cancel selection'
+                                onClick={() => clearSelection()}
+                            />
+                        </div>
                     }
                 </div>
                 <TimerComponent />
@@ -190,31 +239,50 @@ const Dashboard = () => {
                 </div>
                 <div className='w-full grid md:flex px-2 space-y-4 md:space-y-0'>
                     <div className={`w-full grid md:w-3/5`}>
+                        <div className='h-12 flex items-center'>
+                        {
+                            selectedState !== null && (
+                                showmap ?
+                                <div className='w-full flex items-center space-x-8 justify-between'>
+                                    <div 
+                                        className={`cursor-pointer text-sm py-1 ${mapview === 'testing' && 'text-gray-300 dark:text-gray-700'}`}
+                                        onClick={() => toggleMapview(mapview, 'testing')}
+                                    >
+                                        <IoMdArrowDropleft size={30} />
+                                    </div>
+                                    <div>
+                                    {
+                                        mapview === 'testing' ? 'Saturation/coverage for testing' : 'Positives identification'
+                                    }
+                                    </div>
+                                    <div 
+                                        className={`cursor-pointer text-sm py-1 ${mapview === 'positive' && 'text-gray-300 dark:text-gray-700'}`}
+                                        onClick={() => toggleMapview(mapview, 'positive')}
+                                    >
+                                        <IoMdArrowDropright size={30} />
+                                    </div>
+                                </div>
+                                :
+                                <div className='w-full flex items-center space-x-8 justify-center'>
+                                    <div
+                                        className='flex space-x-2 items-center cursor-pointer text-green-800 dark:text-green-300'
+                                        onClick={() => displayMapMarkers()}
+                                    >
+                                        <span className='uppercase'>view on map</span>
+                                        <MdGpsFixed size={15} />
+                                    </div>
+                                </div>
+                            )
+                                
+                        }
+                        </div>
                     {
                         mapview === 'testing' ?
-                            <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers} />
+                            <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers && markers} />
                             :
-                            <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers} />
+                            <GoogleMapComponent loading={loading} selectedState={selectedState} markers={pmarkers && pmarkers} />
                     }
-                        <div className='w-full flex items-center space-x-8 justify-between'>
-                            <div 
-                                className={`cursor-pointer text-sm py-1`}
-                                onClick={() => setMapview('testing')}
-                            >
-                                <IoMdArrowDropleft size={30} />
-                            </div>
-                            <div>
-                            {
-                                mapview === 'testing' ? 'Saturation/coverage for testing' : 'Positives identification'
-                            }
-                            </div>
-                            <div 
-                                className={`cursor-pointer text-sm py-1`}
-                                onClick={() => setMapview('positive')}
-                            >
-                                <IoMdArrowDropright size={30} />
-                            </div>
-                        </div>
+                        
                     </div>
                     <div className='w-full md:w-2/5 px-3 pt-2 md:pt-0 border-t md:border-none border-gray-300 dark:border-gray-700'>
                         <div className={`mt-0 md:mt-[-10px] space-y-4`}>

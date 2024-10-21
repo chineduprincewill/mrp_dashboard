@@ -10,7 +10,7 @@ const AppContextProvider = (props) => {
     const [day28testing, setDay28testing] = useState();
     const [day28positive, setDay28positive] = useState();
     const [selectedState, setSelectedState] = useState(null);
-
+    const [record, setRecord] = useState(null);
     /**const [token, setToken] = useState(userData ? userData?.token : '');
     const [user, setUser] = useState(userData ? userData?.user : null);
     const [record, setRecord] = useState(null);
@@ -28,11 +28,11 @@ const AppContextProvider = (props) => {
             setToken(userData?.token);
             setUser(userData?.user);
         }
-    }, [])
+    }, [])*/
 
     const refreshRecord = (val) => {
         setRecord(val);
-    }*/
+    }
 
     const updateDashboardValues = (val0, val1, val2, val3, val4) => {
         setLocality(val0);
@@ -56,7 +56,7 @@ const AppContextProvider = (props) => {
     }
 
     useEffect(() => {
-        console.log(selectedState);
+        //console.log(selectedState);
     }, [])
 
     return(
@@ -76,6 +76,8 @@ const AppContextProvider = (props) => {
                 cancelFilter,
                 selectedState,
                 updateStateSelection,
+                record,
+                refreshRecord
             }
         }>
             {props.children}

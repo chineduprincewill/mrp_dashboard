@@ -79,7 +79,7 @@ const Navlinks = () => {
                 statesSummary !== null && statesSummary.map((nav, index) => {
                     return (
                         <li 
-                            key={index} className={`px-3 py-4 border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${nav.state === locality && 'bg-gray-200 dark:bg-gray-700'}`}
+                            key={index} className={`px-3 py-1.5 md:py-3 border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${nav.state === locality && 'bg-gray-200 dark:bg-gray-700'}`}
                             onClick={() => updateDashboard(nav.state, nav.total_entries, nav.confirmed, nav.last_28_days_count, nav.confirmed_last_28_days)}
                         >
                             <div className='grid'>

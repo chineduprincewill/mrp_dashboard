@@ -74,7 +74,6 @@ const Navlinks = () => {
 
     return (
         <ul className={`w-full `}>
-            <li className='px-3 h-4'><span className='italic text-xs'>{ fetching && 'loading...'}</span></li>
             {
                 statesSummary !== null && statesSummary.map((nav, index) => {
                     return (

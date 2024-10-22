@@ -167,3 +167,40 @@ export const generateFiscalYear = () => {
 export const pageRefresh = (setRefreshpage) => {
     setTimeout(() => setRefreshpage(Date.now(), 60000));
 }
+
+export const groupAllDataByWeek = (detail) => {
+    const weeklyCounts = {};
+    detail.forEach(item => {
+        const date = moment(item.date_created);
+        const startOfWeek = date.startOf('week').format('YYYY-MM-DD');
+        weeklyCounts[startOfWeek] = (weeklyCounts[startOfWeek] || 0) + 1;
+    });
+    return weeklyCounts;
+}
+
+export const prepareLast28DaysData = (data) => {
+    const today = moment();
+    const october1 = moment('2024-10-01');
+    const totalDays = today.diff(october1, 'days');
+
+    const startDate = totalDays <= 28 ? october1 : today.clone().subtract(27, 'days');
+    const dailyCounts = {};
+
+    data.forEach(item => {
+        const date = moment(item.date_created);
+        if (date.isBetween(startDate, today, 'day', '[]')) {
+            const day = date.format('YYYY-MM-DD');
+            dailyCounts[day] = (dailyCounts[day] || 0) + 1;
+        }
+    });
+
+    const labels = [];
+    const counts = [];
+    for (let i = 0; i <= today.diff(startDate, 'days'); i++) {
+        const day = startDate.clone().add(i, 'days').format('YYYY-MM-DD');
+        labels.push(day);
+        counts.push(dailyCounts[day] || 0);
+    }
+
+    return { labels, counts };
+}

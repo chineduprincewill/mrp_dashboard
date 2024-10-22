@@ -11,7 +11,7 @@ const LineChart = ({ labels, data, barsColor, bgColor, title }) => {
         labels: labels,
         datasets: [
           {
-            label: `${new Date().getFullYear()} ${title} trend`,
+            label: `${title} trend`,
             data: data,
             fill: true,
             backgroundColor: bgColor,
@@ -43,7 +43,7 @@ const LineChart = ({ labels, data, barsColor, bgColor, title }) => {
           grid: {
             display: false
           },
-          beginAtZero: true, // Start y-axis at 0
+          beginAtZero: false, // Start y-axis at 0
         },
       },
       plugins: {

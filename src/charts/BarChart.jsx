@@ -15,7 +15,7 @@ const BarChart = ({ labels, data, barsColor, title }) => {
         labels: labels,
         datasets: [
             {
-                label: `${new Date().getFullYear()} ${title} trend`,
+                label: `${title} trend`,
                 data: data,
                 backgroundColor: barsColor,
                 borderColor: barsColor,

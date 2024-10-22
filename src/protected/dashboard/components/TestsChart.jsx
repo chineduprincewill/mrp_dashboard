@@ -11,6 +11,7 @@ const TestsChart = ({ chart, generateTitle, detail, period, setShowtestmodal }) 
     const [labels, setLabels] = useState();
     const [counts, setCounts] = useState();
     const [modality, setModality] = useState();
+    const [total, setTotal] = useState();
 
     useEffect(() => {  
         if(detail){
@@ -34,6 +35,7 @@ const TestsChart = ({ chart, generateTitle, detail, period, setShowtestmodal }) 
                 setCounts(prepareLast28DaysData(data)?.counts);
                 console.log(prepareLast28DaysData(data));
             }
+            setTotal(data.length);
         }
     }, [detail, modality, period])
 
@@ -41,6 +43,7 @@ const TestsChart = ({ chart, generateTitle, detail, period, setShowtestmodal }) 
         <div className='w-full space-y-2'>                      
             <h1 className='w-full flex justify-between items-center border-b border-gray-300 dark:border-gray-700 font-extralight pb-1'>
                 <span>Tests - {selectedState !== null ? selectedState : <span className='text-red-500'>Select state to view chart</span>}</span>
+                <span>{total && total+' records'}</span>
                 {
                     selectedState !== null &&
                     <FaEye 

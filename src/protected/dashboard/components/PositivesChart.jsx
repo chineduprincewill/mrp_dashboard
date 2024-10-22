@@ -13,6 +13,8 @@ const PositivesChart = ({ chart, generateTitle, detail, period, setShowpositivem
     const [counts, setCounts] = useState();
     const [gender, setGender] = useState();
     const [modality, setModality] = useState();
+    const [age, setAge] = useState();
+    const [total, setTotal] = useState();
 
     useEffect(() => {
         if(detail){
@@ -24,6 +26,13 @@ const PositivesChart = ({ chart, generateTitle, detail, period, setShowpositivem
 
             if(gender){
                 data = data.filter(itm => itm?.cGender === gender);
+            }
+
+            if(age){
+                //console.log(age.split(' - ')[1]);
+                const minAge = age.split(' - ')[0];
+                const maxAge = age.split(' - ')[1];
+                data = age === '50+' ? data.filter(itm => itm?.cAge >= 50) : data.filter(itm => itm?.cAge >= minAge && itm?.cAge <= maxAge);
             }
 
             if(period === 'weekly'){
@@ -42,14 +51,17 @@ const PositivesChart = ({ chart, generateTitle, detail, period, setShowpositivem
                 setCounts(prepareLast28DaysData(data)?.counts);
                 console.log(prepareLast28DaysData(data));
             }
+
+            setTotal(data.length);
         }
-    }, [detail, modality, period, gender])
+    }, [detail, modality, period, gender, age])
 
     return (
         <div className='w-full pt-2 md:pt-0 border-t md:border-none border-gray-300 dark:border-gray-700'>
             <div className={`space-y-2`}>
                 <h1 className='flex justify-between items-center border-b border-gray-300 dark:border-gray-700 font-extralight pb-1'>
                 <span>Positives - {selectedState !== null ? selectedState : <span className='text-red-500'>Select state to view chart</span>}</span>
+                <span>{total && total+' records'}</span>
                 {
                     selectedState !== null &&
                     <FaEye 
@@ -60,7 +72,7 @@ const PositivesChart = ({ chart, generateTitle, detail, period, setShowpositivem
                 }
                 </h1>
                 <div className='w-full flex items-center space-x-4 border-none border-gray-300 dark:border-gray-700'>
-                    <AgeBands />
+                    <AgeBands setAge={setAge} />
                     <select
                         className='border-b border-gray-400 dark:border-gray-700 dark:bg-transparent p-2 text-sm text-gray-500'
                         onChange={(e) => setGender(e.target.value)}

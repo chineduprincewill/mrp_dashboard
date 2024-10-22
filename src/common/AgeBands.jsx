@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const AgeBands = () => {
+const AgeBands = ({ setAge }) => {
 
     const [agebands, setAgebands] = useState();
 
@@ -24,6 +24,7 @@ const AgeBands = () => {
     return (
         <select
                 className='border-b border-gray-400 dark:border-gray-700 dark:bg-transparent p-2 text-sm text-gray-500'
+                onChange={(e) => setAge(e.target.value)}
         >   
             <option value="">Age band</option>
         {

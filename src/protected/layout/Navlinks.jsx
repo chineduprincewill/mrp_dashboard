@@ -7,7 +7,7 @@ import NotificationLoader from '../../common/NotificationLoader';
 const Navlinks = () => {
 
     const locatn = useLocation();
-    const { locality, updateDashboardValues, updateStateSelection } = useContext(AppContext);
+    const { token, locality, updateDashboardValues, updateStateSelection } = useContext(AppContext);
 
     const [statesSummary, setStatesSummary] = useState(null);
     const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const Navlinks = () => {
     }
 
     useEffect(() => {
-        fetchStatesSummary({}, setStatesSummary, setError, setFetching);
+        fetchStatesSummary(token, {}, setStatesSummary, setError, setFetching);
 
         const intervalId = setInterval(() => {
             fetchStatesSummary({}, setStatesSummary, setError, setFetching);

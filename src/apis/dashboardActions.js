@@ -1,6 +1,6 @@
 import axios from "./baseUrl";
 
-export const fetchStatesSummary = async ( data, setStatesSummary, setError, setFetching ) => {
+export const fetchStatesSummary = async ( token, data, setStatesSummary, setError, setFetching ) => {
 
     setFetching(true);
 
@@ -8,7 +8,7 @@ export const fetchStatesSummary = async ( data, setStatesSummary, setError, setF
         const response  = await axios.post(`states-summary`,
             data,
             {
-                headers: { 'Accept' : 'application/json' }
+                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }
         );    
 
@@ -28,7 +28,7 @@ export const fetchStatesSummary = async ( data, setStatesSummary, setError, setF
 }
 
 
-export const fetchStateDetail = async ( data, setStateDetail, setError, setFetching ) => {
+export const fetchStateDetail = async ( token, data, setStateDetail, setError, setFetching ) => {
 
     setFetching(true);
 
@@ -36,7 +36,7 @@ export const fetchStateDetail = async ( data, setStateDetail, setError, setFetch
         const response  = await axios.post(`state-detail`,
             data,
             {
-                headers: { 'Accept' : 'application/json' }
+                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }
         );    
 

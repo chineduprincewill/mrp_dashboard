@@ -5,8 +5,9 @@ const PrivateRoute = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(!localStorage.getItem('isLoggedIn') || JSON.parse(localStorage.getItem('isLoggedIn')) === null){
+        if(!localStorage.getItem('token') || localStorage.getItem('token') === null){
             //navigate('/login');
+            window.location.assign('https://apps.apin.org.ng/sitroom/situation-login.php');
         }
     }, [children])
 

@@ -20,7 +20,7 @@ const Header = ({ toggleSidebar }) => {
                     <div className='flex justify-end text-white space-x-4 text-sm'>
                         <span className='cursor-pointer hover:text-[#a6ce39]'>CEO Dashboard</span>
                         <div className='h-6 border-x border-gray-400'></div>
-                        <span className='cursor-pointer hover:text-[#a6ce39]'>MRP</span>
+                        <a href='https://apps.apin.org.ng/sitroom/dash/public/index.php'><span className='cursor-pointer hover:text-[#a6ce39]'>MRP</span></a>
                         <div className='h-6 border-x border-gray-400'></div>
                         <ThemeToggle />
                     </div>

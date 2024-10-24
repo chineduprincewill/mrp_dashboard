@@ -17,7 +17,11 @@ import PositivesChartModal from './components/PositivesChartModal';
 
 const Dashboard = () => {
 
-    const { locality, totaltesting, totalpositive, day28testing, day28positive, updateDashboardValues, cancelFilter, selectedState, updateStateSelection, record, refreshRecord } = useContext(AppContext);
+    const url = window.location.href;
+    const tokenval = url.split('#')[1];
+    tokenval && localStorage.setItem('token', tokenval);
+
+    const { token, locality, totaltesting, totalpositive, day28testing, day28positive, updateDashboardValues, cancelFilter, selectedState, updateStateSelection, record, refreshRecord } = useContext(AppContext);
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');
     const [refreshpage, setRefreshpage] = useState();
@@ -39,7 +43,7 @@ const Dashboard = () => {
     const [showtestmodal, setShowtestmodal] = useState(false);
     const [showpositivemodal, setShowpositivemodal] = useState(false);
 
-    const labels = () => {
+    /**const labels = () => {
         let data = [];
         for(let i = 1; i <= 52; i++){
             data.push(i);
@@ -52,7 +56,7 @@ const Dashboard = () => {
             length: 52
         }, () => Math.floor(Math.random() * 101));
         return data;
-    }
+    }*/
 
     const clearSelection = () => {
         cancelFilter();
@@ -116,10 +120,10 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        fetchStatesSummary({}, setStatesSummary, setError, setFetching);
+        fetchStatesSummary(token, {}, setStatesSummary, setError, setFetching);
 
         const intervalId = setInterval(() => {
-            fetchStatesSummary({}, setStatesSummary, setError, setFetching);
+            fetchStatesSummary(token, {}, setStatesSummary, setError, setFetching);
         }, 60000); // 60 seconds
       
         return () => clearInterval(intervalId);
@@ -154,7 +158,7 @@ const Dashboard = () => {
             const data = {
                 state: selectedState
             }
-            fetchStateDetail(data, setStateDetail, setError, setLoading);
+            fetchStateDetail(token, data, setStateDetail, setError, setLoading);
             setShowmap(false);
             setMapview('testing');
         }

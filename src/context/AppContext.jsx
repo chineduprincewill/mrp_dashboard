@@ -11,8 +11,8 @@ const AppContextProvider = (props) => {
     const [day28positive, setDay28positive] = useState();
     const [selectedState, setSelectedState] = useState(null);
     const [record, setRecord] = useState(null);
-    /**const [token, setToken] = useState(userData ? userData?.token : '');
-    const [user, setUser] = useState(userData ? userData?.user : null);
+    const [token, setToken] = useState(localStorage.getItem('token'));
+    /**const [user, setUser] = useState(userData ? userData?.user : null);
     const [record, setRecord] = useState(null);
 
     const logout = () => {
@@ -62,8 +62,8 @@ const AppContextProvider = (props) => {
     return(
         <AppContext.Provider value={
             { 
-                /**token, 
-                user, 
+                token, 
+                /**user, 
                 logout, 
                 record, 
                 refreshRecord*/

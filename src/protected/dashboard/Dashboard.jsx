@@ -17,10 +17,6 @@ import PositivesChartModal from './components/PositivesChartModal';
 
 const Dashboard = () => {
 
-    const url = window.location.href;
-    const tokenval = url.split('#')[1];
-    tokenval && localStorage.setItem('token', tokenval);
-
     const { token, locality, totaltesting, totalpositive, day28testing, day28positive, updateDashboardValues, cancelFilter, selectedState, updateStateSelection, record, refreshRecord } = useContext(AppContext);
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');

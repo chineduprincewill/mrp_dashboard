@@ -6,6 +6,10 @@ import AppContextProvider from "./context/AppContext";
 
 function App() {
 
+  const url = window.location.href;
+  const tokenval = url.split('#')[1];
+  tokenval && localStorage.setItem('token', tokenval);
+  
   return (
     <div className={`w-full `}>
       <AppContextProvider>

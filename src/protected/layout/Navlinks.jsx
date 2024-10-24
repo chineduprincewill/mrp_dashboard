@@ -22,7 +22,7 @@ const Navlinks = () => {
         fetchStatesSummary(token, {}, setStatesSummary, setError, setFetching);
 
         const intervalId = setInterval(() => {
-            fetchStatesSummary({}, setStatesSummary, setError, setFetching);
+            fetchStatesSummary(token, {}, setStatesSummary, setError, setFetching);
         }, 60000); // 60 seconds
       
         return () => clearInterval(intervalId);

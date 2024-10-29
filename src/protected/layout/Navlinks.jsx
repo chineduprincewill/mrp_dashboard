@@ -13,6 +13,10 @@ const Navlinks = () => {
     const [error, setError] = useState(null);
     const [fetching, setFetching] = useState(null);
 
+    if(tokenExpired(statesSummary)){
+        window.location.assign('https://apps.apin.org.ng/sitroom/situation-login.php');
+    }
+
     const updateDashboard = (val1, val2, val3, val4, val5) => {
         updateDashboardValues(val1, val2, val3, val4, val5);
         updateStateSelection(val1);
@@ -75,7 +79,7 @@ const Navlinks = () => {
     return (
         <ul className={`w-full `}>
             {
-                statesSummary !== null && statesSummary.map((nav, index) => {
+                statesSummary !== null && statesSummary?.statesSummary.map((nav, index) => {
                     return (
                         <li 
                             key={index} className={`px-3 py-1.5 md:py-3 border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${nav.state === locality && 'bg-gray-200 dark:bg-gray-700'}`}

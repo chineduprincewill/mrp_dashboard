@@ -13,7 +13,7 @@ export const fetchStatesSummary = async ( token, data, setStatesSummary, setErro
         );    
 
         console.log(response.data);
-        setStatesSummary(response.data?.statesSummary);
+        setStatesSummary(response.data);
     }
     catch (err) {
         if (!err?.response) {
@@ -41,7 +41,7 @@ export const fetchStateDetail = async ( token, data, setStateDetail, setError, s
         );    
 
         console.log(response.data);
-        setStateDetail(response.data?.stateDetail);
+        setStateDetail(response.data);
     }
     catch (err) {
         if (!err?.response) {

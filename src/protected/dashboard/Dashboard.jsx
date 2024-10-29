@@ -14,6 +14,7 @@ import TestsChart from './components/TestsChart';
 import PositivesChart from './components/PositivesChart';
 import TestsChartModal from './components/TestsChartModal';
 import PositivesChartModal from './components/PositivesChartModal';
+import { tokenExpired } from '../../apis/functions';
 
 const Dashboard = () => {
 
@@ -39,20 +40,9 @@ const Dashboard = () => {
     const [showtestmodal, setShowtestmodal] = useState(false);
     const [showpositivemodal, setShowpositivemodal] = useState(false);
 
-    /**const labels = () => {
-        let data = [];
-        for(let i = 1; i <= 52; i++){
-            data.push(i);
-        }
-        return data
+    if(tokenExpired(statesSummary) || tokenExpired(stateDetail)){
+        window.location.assign('https://apps.apin.org.ng/sitroom/situation-login.php');
     }
-
-    const data = () => {
-        let data = Array.from({
-            length: 52
-        }, () => Math.floor(Math.random() * 101));
-        return data;
-    }*/
 
     const clearSelection = () => {
         cancelFilter();
@@ -82,7 +72,7 @@ const Dashboard = () => {
     const generateMarkers = () => {
         let mkrdata = [];
         if(stateDetail !== null){
-            stateDetail.map((sd, index) => {
+            stateDetail?.stateDetail.map((sd, index) => {
                 mkrdata.push({
                     id: index,
                     position: {
@@ -99,7 +89,7 @@ const Dashboard = () => {
     const generatePositiveMarkers = () => {
         let mkrdata = [];
         if(stateDetail !== null){
-            stateDetail.map((sd, index) => {
+            stateDetail?.stateDetail.map((sd, index) => {
                 if(sd?.record_status === 'Linked'){
                     mkrdata.push({
                         id: index,
@@ -127,18 +117,11 @@ const Dashboard = () => {
 
     useEffect(() => {
         if(statesSummary !== null){
-            setLoc(statesSummary?.state);
-            setTotaltest(getTotalTests(statesSummary));
-            setTotalpos(getTotalPositives(statesSummary));
-            setDay28test(getTotal28Tests(statesSummary));
-            setDay28pos(getTotal28Positives(statesSummary));
-            /**updateDashboardValues(
-                loc,
-                getTotalTests(statesSummary),
-                getTotalPositives(statesSummary),
-                getTotal28Tests(statesSummary),
-                getTotal28Positives(statesSummary)
-            );*/
+            setLoc(statesSummary?.statesSummary?.state);
+            setTotaltest(getTotalTests(statesSummary?.statesSummary));
+            setTotalpos(getTotalPositives(statesSummary?.statesSummary));
+            setDay28test(getTotal28Tests(statesSummary?.statesSummary));
+            setDay28pos(getTotal28Positives(statesSummary?.statesSummary));
         }
     }, [Date.now()])
 
@@ -289,15 +272,15 @@ const Dashboard = () => {
                             />
                         </div>
                     </div>
-                    <TestsChart chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail} period={period} setShowtestmodal={setShowtestmodal} />
-                    <PositivesChart chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail} period={period} setShowpositivemodal={setShowpositivemodal} />
+                    <TestsChart chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail?.stateDetail} period={period} setShowtestmodal={setShowtestmodal} />
+                    <PositivesChart chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail?.stateDetail} period={period} setShowpositivemodal={setShowpositivemodal} />
                 </div>
             </div>
             {
-                showtestmodal && <TestsChartModal setShowtestmodal={setShowtestmodal} chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail} period={period} />
+                showtestmodal && <TestsChartModal setShowtestmodal={setShowtestmodal} chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail?.stateDetail} period={period} />
             }
             {
-                showpositivemodal && <PositivesChartModal setShowpositivemodal={setShowpositivemodal} chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail} period={period} />
+                showpositivemodal && <PositivesChartModal setShowpositivemodal={setShowpositivemodal} chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail?.stateDetail} period={period} />
             }
         </div>
     )

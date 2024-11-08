@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import PageTitle from '../../common/PageTitle'
 import { TbVirusSearch } from 'react-icons/tb'
 import { AppContext } from '../../context/AppContext'
-import { tokenExpired } from '../../apis/functions'
+import { formatDate, tokenExpired } from '../../apis/functions'
 import { fetchCasefinders } from '../../apis/casefindersActions'
 import TimerComponent from '../../common/TimerComponent'
 import { AiOutlineEdit } from 'react-icons/ai'
@@ -80,6 +80,17 @@ const Casefinders = () => {
             cell: (row) => (
                 <div className='grid py-1 space-y-1'>
                     <div>{row?.linkage_coordinator}</div>
+                </div>
+            )
+        },
+        {
+            name: "Date",
+            selector: (row) => row?.entry_date,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-1 space-y-1'>
+                    <div>{formatDate(row?.entry_date)}</div>
                 </div>
             )
         },

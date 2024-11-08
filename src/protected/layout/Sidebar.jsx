@@ -2,10 +2,14 @@ import React, { Fragment, useContext } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import Navlinks from './Navlinks'
 import { AppContext } from '../../context/AppContext'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { TbLayoutDashboardFilled } from 'react-icons/tb'
+import Navlinks2 from './Navlinks2'
 
 const Sidebar = ({ toggleSidebar, navOpen }) => {
 
-    const { theme } = useContext(AppContext);
+    const locatn = useLocation();
+    const navigate = useNavigate();
 
     return (
         <Fragment>
@@ -29,12 +33,26 @@ const Sidebar = ({ toggleSidebar, navOpen }) => {
                     </div>
                 </div>
                 <div className='w-full px-3 py-1 flex justify-center'>
-                    <div className={`w-full p-3 bg-gray-200 dark:bg-gray-700 mt-1`}>
-                        <span>Tests | <span className='text-[#7d9d25]'>Positives</span></span>
+                    <div className={`w-full p-3 ${locatn.pathname === '/' && 'bg-gray-200 dark:bg-gray-700'} mt-1`}>
+                    {
+                        locatn.pathname === '/' ?
+                            <span>Tests | <span className='text-[#7d9d25]'>Positives</span></span>
+                            :
+                            <div 
+                                className='flex items-center space-x-3 cursor-pointer hover:text-[#a6ce39]'
+                                onClick={() => navigate('/#return')}
+                            >
+                                <TbLayoutDashboardFilled size={17} className='mt-0.5' />
+                                <span>Dashboard</span>
+                            </div>
+                    }
                     </div>
                 </div>
                 <div className='w-full flex justify-start px-3'>
-                    <Navlinks />
+                {
+                    locatn.pathname === '/' ?
+                        <Navlinks /> : <Navlinks2 />
+                }  
                 </div>
             </div>
         </Fragment>

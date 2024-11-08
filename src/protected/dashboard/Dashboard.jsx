@@ -7,17 +7,20 @@ import { ImStatsBars } from 'react-icons/im';
 import { formatNumber } from 'chart.js/helpers';
 import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
 import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io';
-import { fetchStateDetail, fetchStatesSummary, getTotal28Positives, getTotal28Tests, getTotalPositives, getTotalTests } from '../../apis/dashboardActions';
+import { fetchStateDetail, fetchStateLgas, fetchStatesSummary, getTotal28Positives, getTotal28Tests, getTotalPositives, getTotalTests } from '../../apis/dashboardActions';
 import SectionLoader from '../../common/SectionLoader';
 import { MdGpsFixed } from 'react-icons/md';
 import TestsChart from './components/TestsChart';
 import PositivesChart from './components/PositivesChart';
 import TestsChartModal from './components/TestsChartModal';
 import PositivesChartModal from './components/PositivesChartModal';
-import { tokenExpired } from '../../apis/functions';
+import { generateMarkers, generateFilledmapMarkers, generateFilledmapCordinates, tokenExpired } from '../../apis/functions';
+import FilledMapComponent from '../../common/FilledMapComponent';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
 
+    const navigate = useNavigate();
     const { token, locality, totaltesting, totalpositive, day28testing, day28positive, updateDashboardValues, cancelFilter, selectedState, updateStateSelection, record, refreshRecord } = useContext(AppContext);
     const [chart, setChart] = useState('line');
     const [period, setPeriod] = useState('weekly');
@@ -39,9 +42,16 @@ const Dashboard = () => {
     const [showmap, setShowmap] = useState(false);
     const [showtestmodal, setShowtestmodal] = useState(false);
     const [showpositivemodal, setShowpositivemodal] = useState(false);
+    const [lgas, setLgas] = useState(null);
+    const [filledmarkers, setFilledmarkers] = useState();
 
     if(tokenExpired(statesSummary) || tokenExpired(stateDetail)){
         window.location.assign('https://apps.apin.org.ng/sitroom/situation-login.php');
+    }
+
+    if(window.location.href.split('#')[1] === 'return'){
+        navigate('/');
+        window.location.reload();
     }
 
     const clearSelection = () => {
@@ -69,41 +79,6 @@ const Dashboard = () => {
         return msg;
     }
 
-    const generateMarkers = () => {
-        let mkrdata = [];
-        if(stateDetail !== null){
-            stateDetail?.stateDetail.map((sd, index) => {
-                mkrdata.push({
-                    id: index,
-                    position: {
-                        lat: parseFloat(sd?.latitude),
-                        lng: parseFloat(sd?.longitude)
-                    }
-                })
-            })
-        }
-        //console.log(mkrdata);
-        return mkrdata;
-    }
-
-    const generatePositiveMarkers = () => {
-        let mkrdata = [];
-        if(stateDetail !== null){
-            stateDetail?.stateDetail.map((sd, index) => {
-                if(sd?.record_status === 'Linked'){
-                    mkrdata.push({
-                        id: index,
-                        position: {
-                            lat: parseFloat(sd?.latitude),
-                            lng: parseFloat(sd?.longitude)
-                        }
-                    })
-                }
-            })
-        }
-        //console.log(mkrdata);
-        return mkrdata;
-    }
 
     useEffect(() => {
         fetchStatesSummary(token, {}, setStatesSummary, setError, setFetching);
@@ -127,8 +102,8 @@ const Dashboard = () => {
 
     useEffect(() => {
         if(stateDetail !== null) {
-            setMarkers(generateMarkers());
-            setPmarkers(generatePositiveMarkers());
+            setMarkers(generateMarkers(stateDetail));
+            setPmarkers(generateFilledmapMarkers(stateDetail));
         }
     }, [selectedState, record]) 
 
@@ -145,6 +120,19 @@ const Dashboard = () => {
 
     useEffect(() => {
         refreshRecord(Date.now())
+    }, [selectedState])
+
+    useEffect(() => {
+        if(pmarkers && lgas !== null) {
+            //console.log(pmarkers)
+            setFilledmarkers(generateFilledmapCordinates(pmarkers, lgas?.lgas));
+        }
+    }, [pmarkers, lgas])
+
+    useEffect(() => {
+        if(selectedState !== null){
+            fetchStateLgas(token, { state: selectedState }, setLgas, setError);
+        }
     }, [selectedState])
 
     return (
@@ -234,13 +222,18 @@ const Dashboard = () => {
                                 
                         }
                         </div>
-                    {
-                        mapview === 'testing' ?
+                        {
+                            mapview === 'testing' ? 
                             <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers && markers} />
                             :
                             <GoogleMapComponent loading={loading} selectedState={selectedState} markers={pmarkers && pmarkers} />
-                    }
-                        
+                        }
+                        {/**<div className={`${mapview === 'testing' ? 'block' : 'hidden'}`}>
+                            <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers && markers} />
+                        </div>
+                        <div className={`${mapview === 'positive' ? 'block' : 'hidden'}`}>
+                            {mapview === 'positive' && <FilledMapComponent markers={filledmarkers} selectedState={selectedState} />}
+                        </div>*/}
                     </div>
                 </div>
                 <div className='w-full md:w-2/5 grid px-4 space-y-4 md:space-y-4'>

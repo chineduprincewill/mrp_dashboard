@@ -12,6 +12,7 @@ const AppContextProvider = (props) => {
     const [selectedState, setSelectedState] = useState(null);
     const [record, setRecord] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('token'));
+    const [theme, setTheme] = useState(localStorage.getItem("theme"));
     /**const [user, setUser] = useState(userData ? userData?.user : null);
     const [record, setRecord] = useState(null);
 
@@ -56,8 +57,8 @@ const AppContextProvider = (props) => {
     }
 
     useEffect(() => {
-        //console.log(selectedState);
-    }, [])
+        setTheme(localStorage.getItem('theme'));
+    }, [localStorage.getItem('theme')])
 
     return(
         <AppContext.Provider value={
@@ -77,7 +78,8 @@ const AppContextProvider = (props) => {
                 selectedState,
                 updateStateSelection,
                 record,
-                refreshRecord
+                refreshRecord,
+                theme
             }
         }>
             {props.children}

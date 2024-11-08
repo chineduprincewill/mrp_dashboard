@@ -8,17 +8,24 @@ export const formatPagetitle = () => {
 export const tableCustomStyles = {
     headCells: {
       style: {
-          fontSize: '13px',
-          fontWeight: 'bold',
-          padding: '0 15px',
+          fontSize: '11px',
+          textTransform: 'uppercase',
           justifyContent: 'left',
+          backgroundColor: localStorage.getItem('theme') === 'dark' ? '#374151' : '#f3f4f6',
+          color: localStorage.getItem('theme') === 'dark' ? '#f3f4f6' : '#000',
       },
-      rows: {
+    },
+    rows: {
         style: {
-            fontWeight: 'bold', 
-            color: 'red'
+            backgroundColor: localStorage.getItem('theme') === 'dark' ? '#1f2937' : '#f3f4f6',
+            color: localStorage.getItem('theme') === 'dark' ? '#d1d5db' : '#000',
         },
     },
+    pagination: {
+        style: {
+            backgroundColor: localStorage.getItem('theme') === 'dark' ? '#1f2937' : '#f3f4f6',
+            color: localStorage.getItem('theme') === 'dark' ? '#f3f4f6' : '#000',
+        },
     },
   }
 
@@ -203,4 +210,94 @@ export const prepareLast28DaysData = (data) => {
     }
 
     return { labels, counts };
+}
+
+/**export const generateFilledmapCordinates = (arr, key) => {
+    return arr.reduce((result, currentValue) => {
+      // Get the value of the property we want to group by (key)
+      const groupKey = currentValue[key];
+      
+      // If the group doesn't exist in the result object, create it
+      if (!result[groupKey]) {
+        result[groupKey] = [];
+      }
+      
+      // Push the current object into the correct group
+      result[groupKey].push(
+        {"cooridnates": [currentValue?.latitude,currentValue?.longitude]}
+      );
+      
+      return result;
+    }, {}); // Start with an empty object
+  }*/
+
+export const generateFilledmapCordinates = (arr, lgas) => {
+    let mapArr = [];
+
+    lgas.map(lga => {
+        
+        let coord = [];
+                
+        arr.map(item => {
+            if(item?.lga === lga.lga && item?.longitude !== 0 && item?.longitude !== "0"){
+                const lon = parseFloat(item.longitude);
+                const lat = parseFloat(item.latitude);
+                coord.push([lon, lat])
+            }
+        })
+
+        const count = coord.length;
+
+        const endcoord = coord[0];
+        coord.push(endcoord);
+
+        let lgaObj = {
+            "type": "Feature",
+            "properties": { "name": lga.lga, "value": count },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [coord]
+            }
+        }
+        
+        if(count > 0){
+            mapArr.push(lgaObj)
+        } 
+    }) 
+    return mapArr
+}
+
+export const generateMarkers = (stateDetail) => {
+    let mkrdata = [];
+    if(stateDetail !== null){
+        stateDetail?.stateDetail.map((sd, index) => {
+            mkrdata.push({
+                id: index,
+                position: {
+                    lat: parseFloat(sd?.latitude),
+                    lng: parseFloat(sd?.longitude)
+                }
+            })
+        })
+    }
+    return mkrdata;
+}
+
+export const generateFilledmapMarkers = (stateDetail) => {
+    let mkrdata = [];
+    if(stateDetail !== null){
+        stateDetail?.stateDetail.map((sd, index) => {
+            if(sd?.record_status === 'Linked'){
+                mkrdata.push({
+                    id: index,
+                    position: {
+                        lat: parseFloat(sd?.latitude),
+                        lng: parseFloat(sd?.longitude)
+                    }
+                })
+            }
+        })
+    }
+    //console.log(mkrdata);
+    return mkrdata;
 }

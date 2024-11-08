@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { MdDarkMode, MdLightMode } from 'react-icons/md';
+import { useLocation } from 'react-router-dom';
 
 const ThemeToggle = () => {
+    const locatn = useLocation();
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
     // Toggle theme on button click
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme);
+        locatn.pathname !== "/" && window.location.reload();
     };
 
     // Apply theme class to <html> and save to localStorage

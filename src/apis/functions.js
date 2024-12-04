@@ -405,7 +405,9 @@ export const hexToHSL = (hex) => {
 
     //const colors = ['#4d4d4d', '#878787', '#bababa', 'e0e0e0', '#ffffff', 'fddbc7', 'f4a582', '#d6604d', '#b2182b']
 
-    const colors = ['#FFD3B1', '#FFCBA2', '#FFC291', '#FFB782', '#FFAD72', '#FFA062', '#FF9752', '#FF8C3F', '#FF7929', '#FF690F']
+    //const colors = ['#FFD3B1', '#FFCBA2', '#FFC291', '#FFB782', '#FFAD72', '#FFA062', '#FF9752', '#FF8C3F', '#FF7929', '#FF690F']
+
+    const colors = ['#f4d36c', '#f8be61', '#f8a950', '#f5963d', '#f3812c', '#e96e25', '#dc6029', '#cc532a', '#b74a2b', '#a2422f']
 
     arrOfRanges.map((rng, index) => {
         const converted = rng.split(",");

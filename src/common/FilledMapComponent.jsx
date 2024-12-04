@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, useMap, LayersControl } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { getColor } from '../apis/functions';
 
 const geojsonData = {
     "type": "FeatureCollection",
@@ -68,7 +70,9 @@ const statecords = [
     },
 ]
 
-const FilledMapComponent = ({ markers, selectedState }) => {
+const { BaseLayer } = LayersControl;
+
+const FilledMapComponent = ({ markers, selectedState, arrofranges, height, zoom }) => {
 
     const [mapData, setMapData] = useState(null);
 
@@ -97,10 +101,9 @@ const FilledMapComponent = ({ markers, selectedState }) => {
     // Function to style the filled regions based on data properties
     const style = (feature) => {
         return {
-        fillColor: feature.properties.value > 5 ? 'red' : 'green',
+        fillColor: getColor(arrofranges, feature.properties.value),
         weight: 1,
-        opacity: 1,
-        color: 'blue',
+        color: 'gray',
         dashArray: '3',
         fillOpacity: 0.7,
         };
@@ -113,15 +116,23 @@ const FilledMapComponent = ({ markers, selectedState }) => {
             const layer = e.target;
             layer.setStyle({
             weight: 3,
-            color: '#666',
-            fillOpacity: 0.9,
+            color: 'gray',
+            fillOpacity: 0.7,
             });
+            layer.bindTooltip(`
+                <strong>Ward:</strong> ${feature.properties.wardname}<br>
+                <strong>LGA:</strong> ${feature.properties.lganame}<br>
+                ${feature.properties.value !== undefined ? '<strong>Positives:</strong>'+feature.properties.value : ''}
+            `, {
+                permanent: false,
+                direction: 'center'
+            }).openTooltip();
         },
         mouseout: (e) => {
             const layer = e.target;
             layer.setStyle({
             weight: 1,
-            color: 'blue',
+            color: 'gray',
             fillOpacity: 0.7,
             });
         },
@@ -129,14 +140,31 @@ const FilledMapComponent = ({ markers, selectedState }) => {
     };
 
     return (
-        <MapContainer center={getStateCenterCord(selectedState)} zoom={8} style={{ height: "60vh", width: "100%" }}>
-        <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {mapData && (
-            <GeoJSON data={mapData} style={style} onEachFeature={onEachFeature} />
-        )}
+        <MapContainer center={getStateCenterCord(selectedState)} zoom={zoom} style={{ height: height, width: "100%" }}>
+            <LayersControl>
+            {/* Standard Map View */}
+                <BaseLayer checked name="Standard Map">
+                    <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="&copy; OpenStreetMap contributors"
+                    />
+                </BaseLayer>
+
+                {/* Satellite Map View */}
+                <BaseLayer name="Satellite View">
+                    <TileLayer
+                    url="https://{s}.tile.satellite.provider/{z}/{x}/{y}.jpg"
+                    attribution="&copy; Satellite provider"
+                    />
+                </BaseLayer>
+            </LayersControl>
+            <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {mapData && (
+                <GeoJSON data={mapData} style={style} onEachFeature={onEachFeature} />
+            )}
         </MapContainer>
     );
 }

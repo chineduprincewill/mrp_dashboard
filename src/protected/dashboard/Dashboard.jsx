@@ -9,7 +9,7 @@ import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
 import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io';
 import { fetchStateDetail, fetchStateLgas, fetchStatesSummary, getTotal28Positives, getTotal28Tests, getTotalPositives, getTotalTests } from '../../apis/dashboardActions';
 import SectionLoader from '../../common/SectionLoader';
-import { MdGpsFixed } from 'react-icons/md';
+import { MdGpsFixed, MdOutlineZoomOutMap } from 'react-icons/md';
 import TestsChart from './components/TestsChart';
 import PositivesChart from './components/PositivesChart';
 import TestsChartModal from './components/TestsChartModal';
@@ -17,6 +17,8 @@ import PositivesChartModal from './components/PositivesChartModal';
 import { generateMarkers, generateFilledmapMarkers, generateFilledmapCordinates, tokenExpired } from '../../apis/functions';
 import FilledMapComponent from '../../common/FilledMapComponent';
 import { useNavigate } from 'react-router-dom';
+import TestJson from '../testjson/TestJson';
+import FilledmapModal from '../testjson/FilledmapModal';
 
 const Dashboard = () => {
 
@@ -44,6 +46,7 @@ const Dashboard = () => {
     const [showpositivemodal, setShowpositivemodal] = useState(false);
     const [lgas, setLgas] = useState(null);
     const [filledmarkers, setFilledmarkers] = useState();
+    const [zoomfilled, setZoomfilled] = useState(false);
 
     if(tokenExpired(statesSummary) || tokenExpired(stateDetail)){
         window.location.assign('https://apps.apin.org.ng/sitroom/situation-login.php');
@@ -198,7 +201,15 @@ const Dashboard = () => {
                                     </div>
                                     <div>
                                     {
-                                        mapview === 'testing' ? 'Saturation/coverage for testing' : 'Positives identification'
+                                        mapview === 'testing' ? 'Saturation/coverage for testing' : 
+                                        <div className='flex justify-center items-center space-x-4'>
+                                            <span>Ward level Positives identification</span>
+                                            <MdOutlineZoomOutMap 
+                                                size={20} 
+                                                className='cursor-pointer' 
+                                                onClick={() => setZoomfilled(true)}
+                                            />
+                                        </div>
                                     }
                                     </div>
                                     <div 
@@ -226,7 +237,7 @@ const Dashboard = () => {
                             mapview === 'testing' ? 
                             <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers && markers} />
                             :
-                            <GoogleMapComponent loading={loading} selectedState={selectedState} markers={pmarkers && pmarkers} />
+                            <TestJson height='60vh' zoom={8} />
                         }
                         {/**<div className={`${mapview === 'testing' ? 'block' : 'hidden'}`}>
                             <GoogleMapComponent loading={loading} selectedState={selectedState} markers={markers && markers} />
@@ -274,6 +285,9 @@ const Dashboard = () => {
             }
             {
                 showpositivemodal && <PositivesChartModal setShowpositivemodal={setShowpositivemodal} chart={chart} generateTitle={generateTitle()} detail={stateDetail !== null && stateDetail?.stateDetail} period={period} />
+            }
+            {
+                zoomfilled && <FilledmapModal setZoomfilled={setZoomfilled} />
             }
         </div>
     )

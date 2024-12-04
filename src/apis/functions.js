@@ -301,3 +301,129 @@ export const generateFilledmapMarkers = (stateDetail) => {
     //console.log(mkrdata);
     return mkrdata;
 }
+
+export const loadGeoJsonData = () => {
+    const geojsonUrl = '/assets/data.geojson';
+
+    //let result = [];
+    // Use the fetch API to load the GeoJSON file
+    fetch(geojsonUrl)
+    .then(response => {
+        // Check if the response is OK (status code 200)
+        if (!response.ok) {
+        throw new Error('Failed to load GeoJSON file');
+        }
+        return response.json();  // Parse the response as JSON
+    })
+    .then(geojsonData => {
+        // Successfully loaded the GeoJSON data
+        console.log(geojsonData);
+        // You can now work with the GeoJSON data
+        // Example: Access the features of the GeoJSON
+        const features = geojsonData.features;
+        return features;
+    })
+    .catch(error => {
+        // Handle any errors
+        console.error('Error reading GeoJSON file:', error);
+    });
+}
+
+export const generateRanges = (number, divisor) => {
+    const ranges = [];
+    const range = Math.round(number/divisor);
+    
+    for (let i = 1; i <= number; i += range) {
+      const start = i;
+      const end = i + range - 1 <= number ? i + range - 1 : number;
+      ranges.push(`${start},${end}`);
+    }
+  
+    return ranges;
+  }
+
+
+  export const generateShades = (color, numShades = 8) => {
+    // Convert hex color to HSL
+    const hsl = hexToHSL(color);
+    
+    const shades = [];
+    const step = 100 / (numShades - 1); // Step between each shade
+  
+    for (let i = 0; i < numShades; i++) {
+      // Calculate new lightness for each shade
+      const newLightness = Math.max(0, Math.min(100, hsl[2] - i * step));
+      const newHSL = `hsl(${hsl[0]}, ${hsl[1]}%, ${newLightness}%)`;
+      shades.push(newHSL);
+    }
+  
+    return shades;
+  }
+
+
+  // Helper function to convert hex to HSL
+export const hexToHSL = (hex) => {
+    // Remove the '#' if present
+    hex = hex.replace('#', '');
+    
+    // Parse hex color to RGB values
+    let r = parseInt(hex.substring(0, 2), 16) / 255;
+    let g = parseInt(hex.substring(2, 4), 16) / 255;
+    let b = parseInt(hex.substring(4, 6), 16) / 255;
+    
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0;
+    let s = 0;
+    let l = (max + min) / 2;
+  
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+  
+    // Convert to HSL format
+    h = Math.round(h * 360);
+    s = Math.round(s * 100);
+    l = Math.round(l * 100);
+  
+    return [h, s, l];
+  }
+
+
+  export const getColor = (arrOfRanges, wardCount) => {
+    let color;
+
+    //const colors = ['#fff5cb', '#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026', '#5e001c'];
+
+    //const colors = ['#4d4d4d', '#878787', '#bababa', 'e0e0e0', '#ffffff', 'fddbc7', 'f4a582', '#d6604d', '#b2182b']
+
+    const colors = ['#FFD3B1', '#FFCBA2', '#FFC291', '#FFB782', '#FFAD72', '#FFA062', '#FF9752', '#FF8C3F', '#FF7929', '#FF690F']
+
+    arrOfRanges.map((rng, index) => {
+        const converted = rng.split(",");
+        if(wardCount >= parseInt(converted[0]) && wardCount <= parseInt(converted[1])){
+            color = colors[index]
+        }
+    })
+
+    return color
+  }
+  
+
+  export const getTotalWardPositives = (arr) => {
+    //let total = 0;
+
+    /**arr && arr.wardCounts.map(wc => {
+        total += wc.count
+    })*/
+
+    return arr.wardCount[0].count;
+}

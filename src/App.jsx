@@ -5,6 +5,7 @@ import Dashboard from './protected/dashboard/Dashboard'
 import AppContextProvider from "./context/AppContext";
 import 'leaflet/dist/leaflet.css';
 import Casefinders from "./protected/casefinders/Casefinders";
+import TestJson from "./protected/testjson/TestJson";
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
       <AppContextProvider>
         <Router>
           <Routes>
+            <Route path="/test-json" element={<TestJson />} />
             <Route element={<PrivateRoute><DefaultLayout /></PrivateRoute>}>
               <Route path='/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
               <Route path="/case-finders" element={<PrivateRoute><Casefinders /></PrivateRoute>} />

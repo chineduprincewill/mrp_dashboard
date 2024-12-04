@@ -56,6 +56,34 @@ export const fetchStateDetail = async ( token, data, setStateDetail, setError, s
 }
 
 
+export const fetchWardLevelPositivesSummary = async ( token, data, setWardCounts, setError, setFetching ) => {
+
+    setFetching(true);
+
+    try{
+        const response  = await axios.post(`ward-positives-summary`,
+            data,
+            {
+                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
+            }
+        );    
+
+        console.log(response.data);
+        setWardCounts(response.data);
+    }
+    catch (err) {
+        if (!err?.response) {
+            setError('No Response from Server');
+        } else {
+            console.log(err.response.data);
+            setError(err.response.data);
+        }
+    }
+
+    setFetching(false);
+}
+
+
 export const fetchStateLgas = async ( token, data, setLgas, setError ) => {
     try{
         const response  = await axios.post(`state-lgas`,

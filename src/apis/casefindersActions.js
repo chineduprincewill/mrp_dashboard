@@ -109,3 +109,29 @@ export const updateCasefinder = async ( token, data, setSuccess, setError, setUp
 
     setUpdating(false);
 }
+
+export const fetchUsercategories = async ( token, setUsercategories, setError, setFetching ) => {
+
+    setFetching(true);
+
+    try{
+        const response  = await axios.get(`usercategories`,
+            {
+                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
+            }
+        );    
+
+        console.log(response.data);
+        setUsercategories(response.data);
+    }
+    catch (err) {
+        if (!err?.response) {
+            setError('No Response from Server');
+        } else {
+            console.log(err.response.data);
+            setError(err.response.data);
+        }
+    }
+
+    setFetching(false);
+}

@@ -79,7 +79,7 @@ const TestJson = ({ height, zoom }) => {
             {
                 markers ? <FilledMapComponent markers={markers && markers} selectedState={selectedState} arrofranges={arrofranges && arrofranges} height={height} zoom={zoom} />
                 : 
-                <h1 className='text-xl text-red-600'>Data not loaded yet!</h1>
+                <h1 className='text-xl text-green-600'>Data loading...</h1>
             }
         </div>
     )

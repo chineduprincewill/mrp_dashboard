@@ -20,6 +20,10 @@ const PositivesChart = ({ chart, generateTitle, detail, period, setShowpositivem
         if(detail){
             let data = detail.filter(itm => itm?.record_status === 'Linked');
 
+            data = Array.from(
+                new Map(data.map(item => [item.patient_id, item])).values()
+            );
+
             if(modality){
                 data = data.filter(itm => itm?.obsDatapoint === modality);
             }

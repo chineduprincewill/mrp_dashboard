@@ -5,14 +5,14 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 // Register required Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = ({ labels, data }) => {
+const PieChart = ({ data, title }) => {
 
     const chartData = {
-        labels: labels,
+        labels: data?.labels,
         datasets: [
           {
-            label: 'Patients in range',
-            data: data,
+            label: title,
+            data: data?.counts,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',

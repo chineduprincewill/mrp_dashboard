@@ -330,14 +330,21 @@ export const loadGeoJsonData = () => {
 }
 
 export const generateRanges = (number, divisor) => {
+
+    const finaldivisor = number < divisor ? number : divisor;
+    console.log(number, divisor, finaldivisor);
     const ranges = [];
-    const range = Math.round(number/divisor);
+    const range = Math.round(number/finaldivisor);
+
+    console.log(range);
     
     for (let i = 1; i <= number; i += range) {
       const start = i;
       const end = i + range - 1 <= number ? i + range - 1 : number;
       ranges.push(`${start},${end}`);
     }
+
+    console.log(ranges);
   
     return ranges;
   }
@@ -407,7 +414,7 @@ export const hexToHSL = (hex) => {
 
     //const colors = ['#FFD3B1', '#FFCBA2', '#FFC291', '#FFB782', '#FFAD72', '#FFA062', '#FF9752', '#FF8C3F', '#FF7929', '#FF690F']
 
-    const colors = ['#f4d36c', '#f8be61', '#f8a950', '#f5963d', '#f3812c', '#e96e25', '#dc6029', '#cc532a', '#b74a2b', '#a2422f']
+    const colors = ['#f4d36c', '#f8be61', '#f8a950', '#f5963d', '#f3812c', '#e96e25', '#dc6029', '#cc532a', '#b74a2b', '#a2422f', '#742516']
 
     arrOfRanges.map((rng, index) => {
         const converted = rng.split(",");
